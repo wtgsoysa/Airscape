@@ -19,3 +19,4 @@ Route::view('/admin/dashboard', 'pages.admin.dashboard')->name('admin.dashboard'
 Route::view('/admin/sensors', 'pages.admin.sensors')->name('admin.sensors');
 
 
+
