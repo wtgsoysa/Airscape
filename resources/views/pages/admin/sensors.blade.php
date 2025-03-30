@@ -53,14 +53,15 @@
         min-height: 100vh;
     }
 
-    .sensor-row {
-        gap: 40px;
-    }
-
     #map {
-        height: 350px;
+        height: 500px;
         width: 100%;
         border-radius: 12px;
+    }
+
+    .sensor-scroll {
+        max-height: 500px;
+        overflow-y: auto;
     }
 </style>
 
@@ -70,32 +71,49 @@
         <button class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addSensorModal">Add Sensor</button>
     </div>
 
-    <div class="row sensor-row">
-        <div class="col-md-6">
-            <!-- Sensor Card -->
-            <div class="sensor-card">
-                <div><strong>City</strong></div>
-                <div>Colombo Metropolitan Area</div>
-
-                <div class="d-flex justify-content-between align-items-center mt-3">
-                    <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
-
-                    <div class="dropdown">
-                        <button class="btn btn-sm border dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-three-dots-vertical"></i>
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Edit</a></li>
-                            <li><a class="dropdown-item text-danger" href="#">Inactive</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+    <div class="row gx-5">
+        <!-- Left: Leaflet Map -->
+        <div class="col-lg-7 mb-4 mb-lg-0">
+            <div id="map"></div>
         </div>
 
-        <!-- Leaflet Map -->
-        <div class="col-md-6">
-            <div id="map"></div>
+        <!-- Right: Sensor Cards -->
+        <div class="col-lg-5 sensor-scroll">
+            <!-- Colombo -->
+            <div class="sensor-card mb-4">
+                <div><strong>City</strong></div>
+                <div>Colombo</div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
+                </div>
+            </div>
+
+            <!-- Dehiwala -->
+            <div class="sensor-card mb-4">
+                <div><strong>City</strong></div>
+                <div>Dehiwala</div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
+                </div>
+            </div>
+
+            <!-- Kotte -->
+            <div class="sensor-card mb-4">
+                <div><strong>City</strong></div>
+                <div>Sri Jayawardenapura Kotte</div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
+                </div>
+            </div>
+
+            <!-- Moratuwa -->
+            <div class="sensor-card mb-4">
+                <div><strong>City</strong></div>
+                <div>Moratuwa</div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -165,16 +183,24 @@
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const map = L.map('map').setView([6.9271, 79.8612], 11); // Colombo
+    const map = L.map('map').setView([6.85, 79.88], 11); // Center between cities
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Example marker
-    L.marker([6.9271, 79.8612])
-        .addTo(map)
-        .bindPopup("Colombo Sensor")
-        .openPopup();
+    // Sensor markers
+    const sensors = [
+        { name: "Colombo Sensor", coords: [6.9271, 79.8612] },
+        { name: "Dehiwala Sensor", coords: [6.8506, 79.8656] },
+        { name: "Kotte Sensor", coords: [6.8918, 79.9182] },
+        { name: "Moratuwa Sensor", coords: [6.7730, 79.8815] }
+    ];
+
+    sensors.forEach(sensor => {
+        L.marker(sensor.coords)
+            .addTo(map)
+            .bindPopup(`<strong>${sensor.name}</strong><br>Status: Active`);
+    });
 </script>
 @endpush

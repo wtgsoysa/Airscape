@@ -95,7 +95,7 @@
 <div class="sidebar d-flex flex-column justify-content-between">
     <div>
         <div class="logo">
-            <img src="{{ asset('assets/Logo White.svg') }}" alt="Airscape Logo">
+         <div class="logo"><img src="/assests/Logo White.svg" alt=""></div>
         </div>
         <a href="#">Dashboard</a>
         <a href="#">Sensor Management</a>
