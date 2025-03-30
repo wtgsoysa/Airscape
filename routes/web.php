@@ -22,6 +22,10 @@ Route::get('/admin/data-management', function () {
     return view('pages.admin.data-management');
 })->name('admin.data-management');
 
+Route::get('/admin/user-management', function () {
+    return view('pages.admin.user-management');
+})->name('admin.user-management');
+
 
 
 
