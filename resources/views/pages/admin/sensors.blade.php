@@ -26,12 +26,6 @@
         font-weight: 500;
     }
 
-    .map-preview {
-        width: 100%;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-
     .dropdown-toggle::after {
         display: none;
     }
@@ -61,6 +55,12 @@
 
     .sensor-row {
         gap: 40px;
+    }
+
+    #map {
+        height: 350px;
+        width: 100%;
+        border-radius: 12px;
     }
 </style>
 
@@ -93,9 +93,9 @@
             </div>
         </div>
 
-        <!-- Map Placeholder -->
+        <!-- Leaflet Map -->
         <div class="col-md-6">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Colombo_District.svg/1200px-Colombo_District.svg.png" class="map-preview" alt="Map Preview">
+            <div id="map"></div>
         </div>
     </div>
 </div>
@@ -160,3 +160,21 @@
   </div>
 </div>
 @endsection
+
+@push('scripts')
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    const map = L.map('map').setView([6.9271, 79.8612], 11); // Colombo
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Example marker
+    L.marker([6.9271, 79.8612])
+        .addTo(map)
+        .bindPopup("Colombo Sensor")
+        .openPopup();
+</script>
+@endpush
