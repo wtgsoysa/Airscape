@@ -104,7 +104,7 @@
         <a href="/admin/alert-configuration">Alert Configuration</a>
     </div>
     <div class="px-3">
-        <button class="logout-btn">Logout</button>
+    <a href="/admin" class="logout-btn d-inline-block text-decoration-none">Logout</a>
         <div class="text-white small mt-4 px-2">© 2025 airscape - All Rights Reserved.</div>
     </div>
 </div>
