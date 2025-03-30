@@ -15,6 +15,16 @@
         border-radius: 12px;
         border: 1px solid #cde7de;
         width: 100%;
+        position: relative;
+    }
+
+    .sensor-id {
+        position: absolute;
+        top: 14px;
+        right: 16px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #777;
     }
 
     .status-badge {
@@ -24,10 +34,6 @@
         font-size: 14px;
         padding: 4px 12px;
         font-weight: 500;
-    }
-
-    .dropdown-toggle::after {
-        display: none;
     }
 
     .btn-add {
@@ -63,6 +69,18 @@
         max-height: 500px;
         overflow-y: auto;
     }
+
+    .delete-icon {
+        position: absolute;
+        bottom: 16px;
+        right: 20px;
+        cursor: pointer;
+        color: #d62828;
+    }
+
+    .delete-icon:hover {
+        color: #a11d1d;
+    }
 </style>
 
 <div class="page-wrapper">
@@ -72,47 +90,55 @@
     </div>
 
     <div class="row gx-5">
-        <!-- Left: Leaflet Map -->
+        <!-- Left: Map -->
         <div class="col-lg-7 mb-4 mb-lg-0">
             <div id="map"></div>
         </div>
 
-        <!-- Right: Sensor Cards -->
+        <!-- Right: Sensors -->
         <div class="col-lg-5 sensor-scroll">
             <!-- Colombo -->
             <div class="sensor-card mb-4">
+                <div class="sensor-id">#S001</div>
                 <div><strong>City</strong></div>
                 <div>Colombo</div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
                 </div>
+                <i class="bi bi-trash-fill delete-icon" title="Delete"></i>
             </div>
 
             <!-- Dehiwala -->
             <div class="sensor-card mb-4">
+                <div class="sensor-id">#S002</div>
                 <div><strong>City</strong></div>
                 <div>Dehiwala</div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
                 </div>
+                <i class="bi bi-trash-fill delete-icon" title="Delete"></i>
             </div>
 
             <!-- Kotte -->
             <div class="sensor-card mb-4">
+                <div class="sensor-id">#S003</div>
                 <div><strong>City</strong></div>
                 <div>Sri Jayawardenapura Kotte</div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
                 </div>
+                <i class="bi bi-trash-fill delete-icon" title="Delete"></i>
             </div>
 
             <!-- Moratuwa -->
             <div class="sensor-card mb-4">
+                <div class="sensor-id">#S004</div>
                 <div><strong>City</strong></div>
                 <div>Moratuwa</div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
                 </div>
+                <i class="bi bi-trash-fill delete-icon" title="Delete"></i>
             </div>
         </div>
     </div>
@@ -183,13 +209,12 @@
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-    const map = L.map('map').setView([6.85, 79.88], 11); // Center between cities
+    const map = L.map('map').setView([6.85, 79.88], 11);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Sensor markers
     const sensors = [
         { name: "Colombo Sensor", coords: [6.9271, 79.8612] },
         { name: "Dehiwala Sensor", coords: [6.8506, 79.8656] },
