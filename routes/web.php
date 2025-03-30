@@ -15,4 +15,6 @@ Route::get('/login/admin', function () {
 
 Route::view('/login/webmaster', 'pages.auth.webmaster-login')->name('login.webmaster');
 Route::view('/login/admin', 'pages.auth.admin-login')->name('login.admin');
+Route::view('/admin/dashboard', 'pages.admin.dashboard')->name('admin.dashboard');
+
 
