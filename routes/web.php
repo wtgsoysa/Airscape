@@ -12,3 +12,7 @@ Route::get('/login/webmaster', function () {
 Route::get('/login/admin', function () {
     return 'Admin Login Page'; // temp placeholder
 })->name('login.admin');
+
+Route::view('/login/webmaster', 'pages.auth.webmaster-login')->name('login.webmaster');
+Route::view('/login/admin', 'pages.auth.admin-login')->name('login.admin');
+
