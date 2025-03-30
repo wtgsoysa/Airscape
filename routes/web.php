@@ -18,4 +18,8 @@ Route::view('/login/admin', 'pages.auth.admin-login')->name('login.admin');
 Route::view('/admin/dashboard', 'pages.admin.dashboard')->name('admin.dashboard');
 Route::view('/admin/sensors', 'pages.admin.sensors')->name('admin.sensors');
 
+Route::get('/admin/data-management', function () {
+    return view('pages.admin.data-management');
+})->name('admin.data-management');
+
 
