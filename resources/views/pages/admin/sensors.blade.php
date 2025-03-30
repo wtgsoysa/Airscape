@@ -15,7 +15,6 @@
         border-radius: 12px;
         border: 1px solid #cde7de;
         width: 100%;
-        max-width: 400px;
     }
 
     .status-badge {
@@ -29,7 +28,6 @@
 
     .map-preview {
         width: 100%;
-        max-width: 400px;
         border-radius: 12px;
         overflow: hidden;
     }
@@ -42,7 +40,7 @@
         background-color: #007872;
         color: white;
         border: none;
-        padding: 8px 16px;
+        padding: 8px 20px;
         font-weight: 500;
         border-radius: 8px;
     }
@@ -54,39 +52,51 @@
     .modal-content {
         border-radius: 16px;
     }
+
+    .page-wrapper {
+        background-color: #ffffff;
+        padding: 40px;
+        min-height: 100vh;
+    }
+
+    .sensor-row {
+        gap: 40px;
+    }
 </style>
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h4 class="section-title mb-0">Sensor Management</h4>
-    <button class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addSensorModal">Add Sensor</button>
-</div>
+<div class="page-wrapper">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="section-title mb-0">Sensor Management</h4>
+        <button class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addSensorModal">Add Sensor</button>
+    </div>
 
-<div class="row g-4">
-    <div class="col-md-6">
-        <!-- Sensor Card -->
-        <div class="sensor-card">
-            <div><strong>City</strong></div>
-            <div>Colombo Metropolitan Area</div>
+    <div class="row sensor-row">
+        <div class="col-md-6">
+            <!-- Sensor Card -->
+            <div class="sensor-card">
+                <div><strong>City</strong></div>
+                <div>Colombo Metropolitan Area</div>
 
-            <div class="d-flex justify-content-between align-items-center mt-3">
-                <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div><strong>Status</strong> <span class="status-badge ms-2">Active</span></div>
 
-                <div class="dropdown">
-                    <button class="btn btn-sm border dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="bi bi-three-dots-vertical"></i>
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                        <li><a class="dropdown-item text-danger" href="#">Inactive</a></li>
-                    </ul>
+                    <div class="dropdown">
+                        <button class="btn btn-sm border dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">Edit</a></li>
+                            <li><a class="dropdown-item text-danger" href="#">Inactive</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Map Placeholder -->
-    <div class="col-md-6">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Colombo_District.svg/1200px-Colombo_District.svg.png" class="map-preview" alt="Map Preview">
+        <!-- Map Placeholder -->
+        <div class="col-md-6">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Colombo_District.svg/1200px-Colombo_District.svg.png" class="map-preview" alt="Map Preview">
+        </div>
     </div>
 </div>
 
