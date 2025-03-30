@@ -26,7 +26,10 @@ Route::get('/admin/user-management', function () {
     return view('pages.admin.user-management');
 })->name('admin.user-management');
 
-
+// Alert Configuration
+Route::get('/admin/alert-configuration', function () {
+    return view('pages.admin.alert-configuration');
+})->name('alert.configuration');
 
 
 
