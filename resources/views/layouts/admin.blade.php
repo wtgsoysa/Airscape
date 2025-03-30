@@ -97,11 +97,11 @@
         <div class="logo">
          <div class="logo"><img src="/assests/Logo White.svg" alt=""></div>
         </div>
-        <a href="#">Dashboard</a>
-        <a href="#">Sensor Management</a>
-        <a href="#">Data Management</a>
-        <a href="#">AdminUser Management</a>
-        <a href="#">Alert Configuration</a>
+        <a href="/admin/dashboard">Dashboard</a>
+        <a href="/admin/sensors">Sensor Management</a>
+        <a href="/admin/data-management">Data Management</a>
+        <a href="/admin/user-management">AdminUser Management</a>
+        <a href="/admin/alert-configuration">Alert Configuration</a>
     </div>
     <div class="px-3">
         <button class="logout-btn">Logout</button>
