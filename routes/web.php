@@ -1,7 +1,14 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::redirect('/', '/admin');
+
+Route::view('/admin', 'pages.auth.role-selection')->name('admin.role');
+
+Route::get('/login/webmaster', function () {
+    return 'Web Master Login Page'; // temp placeholder
+})->name('login.webmaster');
+
+Route::get('/login/admin', function () {
+    return 'Admin Login Page'; // temp placeholder
+})->name('login.admin');
