@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <title>Airscape Admin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <!-- Bootstrap + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
     <style>
         body {
             background-color: #ffffff;
@@ -36,11 +41,12 @@
         }
 
         .sidebar .logo {
-            color: #ffffff;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 50px;
             text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .sidebar .logo img {
+            max-width: 160px;
         }
 
         .logout-btn {
@@ -59,7 +65,7 @@
         }
 
         .content {
-            margin-left: 240px;
+            margin-left: 280px;
             padding: 30px 40px;
         }
 
@@ -85,9 +91,12 @@
 </head>
 <body>
 
+<!-- Sidebar -->
 <div class="sidebar d-flex flex-column justify-content-between">
     <div>
-    <div class="logo"><img src="/assests/Logo White.svg" alt=""></div>
+        <div class="logo">
+            <img src="{{ asset('assets/Logo White.svg') }}" alt="Airscape Logo">
+        </div>
         <a href="#">Dashboard</a>
         <a href="#">Sensor Management</a>
         <a href="#">Data Management</a>
@@ -100,6 +109,7 @@
     </div>
 </div>
 
+<!-- Main Content -->
 <div class="content">
     <div class="topbar">
         <div class="user-badge me-2">
@@ -111,6 +121,11 @@
     @yield('content')
 </div>
 
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Page-specific Scripts -->
+@stack('scripts')
+
 </body>
 </html>
