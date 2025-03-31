@@ -1,20 +1,17 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/admin');
+// Default Route → Redirect to User Home
+Route::redirect('/', '/user/home');
+
+// ───── Admin Routes ─────
 
 Route::view('/admin', 'pages.auth.role-selection')->name('admin.role');
 
-Route::get('/login/webmaster', function () {
-    return 'Web Master Login Page'; // temp placeholder
-})->name('login.webmaster');
-
-Route::get('/login/admin', function () {
-    return 'Admin Login Page'; // temp placeholder
-})->name('login.admin');
-
 Route::view('/login/webmaster', 'pages.auth.webmaster-login')->name('login.webmaster');
 Route::view('/login/admin', 'pages.auth.admin-login')->name('login.admin');
+
 Route::view('/admin/dashboard', 'pages.admin.dashboard')->name('admin.dashboard');
 Route::view('/admin/sensors', 'pages.admin.sensors')->name('admin.sensors');
 
@@ -26,10 +23,14 @@ Route::get('/admin/user-management', function () {
     return view('pages.admin.user-management');
 })->name('admin.user-management');
 
-// Alert Configuration
 Route::get('/admin/alert-configuration', function () {
     return view('pages.admin.alert-configuration');
 })->name('alert.configuration');
 
+// ───── User Routes ─────
 
+// web.php
+Route::get('/user/home', function () {
+    return view('pages.user.home');
+})->name('user.home');
 
