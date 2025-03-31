@@ -27,3 +27,10 @@ Route::get('/admin/alert-configuration', function () {
     return view('pages.admin.alert-configuration');
 })->name('alert.configuration');
 
+// ───── User Routes ─────
+
+// web.php
+Route::get('/user/home', function () {
+    return view('pages.user.home');
+})->name('user.home');
+
