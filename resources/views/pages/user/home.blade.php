@@ -1,4 +1,4 @@
-@extends('layouts.user') {{-- or use layouts.user if you have a separate one --}}
+@extends('layouts.user')
 
 @section('content')
 <style>
@@ -21,39 +21,6 @@
         margin: 0 auto;
     }
 
-    .aqi-box {
-        background-color: #e8f7ee;
-        color: #007872;
-        font-weight: 600;
-        padding: 10px 18px;
-        border-radius: 12px;
-        display: inline-block;
-        font-size: 18px;
-        margin-bottom: 20px;
-    }
-
-    .aqi-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 20px;
-        text-align: center;
-        padding: 0 20px;
-    }
-
-    .aqi-card {
-        background-color: #ffffff;
-        border: 1px solid #e3f2ef;
-        border-radius: 12px;
-        padding: 14px;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    .aqi-card .label {
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 6px;
-    }
-
     .map-section {
         padding: 40px 20px;
     }
@@ -64,49 +31,11 @@
         border-radius: 12px;
         box-shadow: 0 2px 6px rgba(0,0,0,0.05);
     }
-
-    .footer {
-        background-color: #003B3B;
-        color: #fff;
-        padding: 30px;
-        margin-top: 50px;
-        text-align: center;
-    }
-
-    .footer a {
-        color: #fff;
-        margin: 0 10px;
-        font-weight: 500;
-        text-decoration: none;
-    }
 </style>
 
 <div class="hero">
     <h2>Know Your Air</h2>
-    <p>Real-time Air Quality Index across the Colombo Metropolitan Region</p>
-</div>
-
-<div class="text-center my-3">
-    <div class="aqi-box">Colombo AQI: 27 <span class="badge bg-success ms-2">Good</span></div>
-</div>
-
-<div class="aqi-grid">
-    <div class="aqi-card">
-        <div class="label">PM2.5</div>
-        <div>30 μg/m³</div>
-    </div>
-    <div class="aqi-card">
-        <div class="label">O₃</div>
-        <div>20 μg/m³</div>
-    </div>
-    <div class="aqi-card">
-        <div class="label">NO₂</div>
-        <div>29 μg/m³</div>
-    </div>
-    <div class="aqi-card">
-        <div class="label">SO₂</div>
-        <div>35 μg/m³</div>
-    </div>
+    <p>Real-Time Air Quality In Colombo</p>
 </div>
 
 <div class="map-section">
@@ -114,8 +43,40 @@
     <div id="map"></div>
 </div>
 
+<!-- Sensor AQI Modal -->
+<div class="modal fade" id="sensorAqiModal" tabindex="-1" aria-labelledby="sensorAqiModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-4" style="border-radius: 16px;">
+      <h6 class="fw-bold mb-2 text-muted">Current AQI Value <span class="float-end fs-2 text-dark">50</span></h6>
+      <span class="badge bg-success mb-2">Good</span>
+      <p class="text-muted small">Air quality is acceptable. But there may be a risk for someone with 24 hours exposure.</p>
+      
+      <div class="mb-3">
+        <div class="d-flex justify-content-between mb-1"><span>PM₁₀</span><span>30</span></div>
+        <div class="progress mb-2" style="height: 6px;"><div class="progress-bar bg-danger" style="width: 30%"></div></div>
 
+        <div class="d-flex justify-content-between mb-1"><span>O₃</span><span>30</span></div>
+        <div class="progress mb-2" style="height: 6px;"><div class="progress-bar bg-warning" style="width: 30%"></div></div>
 
+        <div class="d-flex justify-content-between mb-1"><span>NO₂</span><span>30</span></div>
+        <div class="progress mb-2" style="height: 6px;"><div class="progress-bar bg-success" style="width: 30%"></div></div>
+
+        <div class="d-flex justify-content-between mb-1"><span>SO₂</span><span>30</span></div>
+        <div class="progress mb-3" style="height: 6px;"><div class="progress-bar bg-warning" style="width: 30%"></div></div>
+      </div>
+
+      <div class="d-flex justify-content-between text-center text-white bg-teal rounded px-3 py-2" style="background-color: #007872;">
+        <div>Now<br><strong>56</strong></div>
+        <div>10 Min<br><strong>56</strong></div>
+        <div>30 Min<br><strong>56</strong></div>
+        <div>1 Hr<br><strong>56</strong></div>
+        <div>6 Hr<br><strong>56</strong></div>
+        <div>1 Day<br><strong>56</strong></div>
+        <div>1 Week<br><strong>56</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -128,26 +89,22 @@
     }).addTo(map);
 
     const sensors = [
-        {
-            name: "Colombo",
-            coords: [6.9271, 79.8612],
-            aqi: 27
-        },
-        {
-            name: "Dehiwala",
-            coords: [6.8506, 79.8656],
-            aqi: 55
-        },
-        {
-            name: "Kotte",
-            coords: [6.8918, 79.9182],
-            aqi: 102
-        }
+        { name: "Colombo", coords: [6.9271, 79.8612] },
+        { name: "Dehiwala", coords: [6.8506, 79.8656] },
+        { name: "Kotte", coords: [6.8918, 79.9182] }
     ];
 
     sensors.forEach(sensor => {
-        const popup = `<strong>${sensor.name}</strong><br>AQI: ${sensor.aqi}`;
-        L.marker(sensor.coords).addTo(map).bindPopup(popup);
+        const marker = L.marker(sensor.coords).addTo(map);
+        marker.bindPopup(`
+            <strong>${sensor.name}</strong><br>
+            <button class="btn btn-sm btn-primary mt-2" onclick="showSensorModal()">View AQI</button>
+        `);
     });
+
+    function showSensorModal() {
+        const modal = new bootstrap.Modal(document.getElementById('sensorAqiModal'));
+        modal.show();
+    }
 </script>
 @endpush
