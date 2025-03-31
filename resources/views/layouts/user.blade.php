@@ -60,7 +60,7 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container">
         <a class="navbar-brand" href="/user/home">
-           <img src="/assests/Logo White.svg" alt="Airscape Logo">
+           <img src="/assests/Logo.svg" alt="Airscape Logo">
         </a>
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
@@ -79,7 +79,7 @@
 
 <!-- Footer -->
 <footer>
-    <img src="{{ asset('assets/Logo White.svg') }}" alt="Airscape Logo">
+    <img src="/assests/Logo.svg" alt="Airscape Logo">
     <div class="mt-3">
         <a href="#">Home</a> |
         <a href="#">About</a> |
