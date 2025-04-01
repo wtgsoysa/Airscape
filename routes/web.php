@@ -39,10 +39,11 @@ Route::get('/admin/data-management', function () {
 
 Route::get('/admin/user-management', function () {
     if (auth()->user()->role !== 'webmaster') {
-        abort(403);
+        return view('errors.no-access');
     }
     return view('admin.partials.user-management');
 })->middleware('auth')->name('admin.user-management');
+
 
 
 
