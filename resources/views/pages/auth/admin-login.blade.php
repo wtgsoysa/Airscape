@@ -52,21 +52,37 @@
     </div>
 
     <div class="login-card">
-        <form action="#" method="POST">
-            {{-- @csrf --}}
-            <div class="mb-3">
-                <label for="email" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="email" placeholder="admin@example.com">
-            </div>
+    <form action="{{ route('login.admin.submit') }}" method="POST">
+        @csrf
 
-            <div class="mb-4">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="••••••••">
-            </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email address</label>
+            <input
+                type="email"
+                class="form-control"
+                id="email"
+                name="email"  {{-- ✅ this is what lets Laravel receive the value --}}
+                placeholder="admin@example.com"
+                required
+            >
+        </div>
 
-            <button type="submit" class="btn btn-login w-100">Login</button>
-        </form>
-    </div>
+        <div class="mb-4">
+            <label for="password" class="form-label">Password</label>
+            <input
+                type="password"
+                class="form-control"
+                id="password"
+                name="password"  {{-- ✅ this is what makes Auth work --}}
+                placeholder="••••••••"
+                required
+            >
+        </div>
+
+        <button type="submit" class="btn btn-login w-100">Login</button>
+    </form>
+</div>
+
 
     <div class="mt-5 text-muted small">
         © 2025 airscape - All Rights Reserved.
