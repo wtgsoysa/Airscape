@@ -58,7 +58,7 @@
 <div class="container d-flex flex-column align-items-center justify-content-center" style="min-height: 100vh;">
     <!-- Logo -->
     <div class="text-center mb-4">
-        <div class="airscape-logo"><img src="/assests/Logo.svg" alt=""></div>
+        <div class="airscape-logo"><img src="{{ asset('assets/Logo.svg') }}" alt=""></div>
     </div>
 
     <!-- Title -->

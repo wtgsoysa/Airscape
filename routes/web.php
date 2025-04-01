@@ -1,18 +1,36 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
-// Default Route → Redirect to User Home
+// ───── Default User Redirect ─────
 Route::redirect('/', '/user/home');
 
-// ───── Admin Routes ─────
 
-Route::view('/admin', 'pages.auth.role-selection')->name('admin.role');
+// ───── Admin Auth Routes ─────
 
-Route::view('/login/webmaster', 'pages.auth.webmaster-login')->name('login.webmaster');
-Route::view('/login/admin', 'pages.auth.admin-login')->name('login.admin');
+// Role selection page
+Route::get('/admin', [AuthController::class, 'showRoleSelect'])->name('admin.role');
 
-Route::view('/admin/dashboard', 'pages.admin.dashboard')->name('admin.dashboard');
+// Web Master Login
+Route::get('/admin/login/webmaster', [AuthController::class, 'showWebmasterLogin'])->name('login.webmaster');
+Route::post('/admin/login/webmaster', [AuthController::class, 'loginWebmaster'])->name('login.webmaster.submit');
+
+// Admin Login
+Route::get('/admin/login/monitor', [AuthController::class, 'showAdminLogin'])->name('login.admin');
+Route::post('/admin/login/monitor', [AuthController::class, 'loginAdmin'])->name('login.admin.submit');
+
+// Dashboard (shared for both roles)
+Route::middleware(['auth'])->get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('dashboard');
+
+// Logout
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// ───── Admin Pages ─────
+
 Route::view('/admin/sensors', 'pages.admin.sensors')->name('admin.sensors');
 
 Route::get('/admin/data-management', function () {
@@ -20,19 +38,21 @@ Route::get('/admin/data-management', function () {
 })->name('admin.data-management');
 
 Route::get('/admin/user-management', function () {
-    return view('pages.admin.user-management');
-})->name('admin.user-management');
+    if (auth()->user()->role !== 'webmaster') {
+        abort(403);
+    }
+    return view('admin.partials.user-management');
+})->middleware('auth')->name('admin.user-management');
+
+
 
 Route::get('/admin/alert-configuration', function () {
     return view('pages.admin.alert-configuration');
 })->name('alert.configuration');
 
-// ───── User Routes ─────
 
-// web.php
+// ───── User Public Routes ─────
+
 Route::get('/user/home', function () {
     return view('pages.user.home');
 })->name('user.home');
-
-
-
