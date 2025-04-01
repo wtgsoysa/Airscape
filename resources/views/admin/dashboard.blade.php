@@ -59,7 +59,6 @@
 
     <h6 class="text-muted mb-3">Status</h6>
 
-    <!-- Status Card -->
     <div class="dashboard-status-card">
         <div><strong>City</strong></div>
         <div>Colombo Metropolitan Area</div>
@@ -69,5 +68,7 @@
             <div><strong>AQI</strong> <span class="ms-2">27</span></div>
         </div>
     </div>
+
+    
 </div>
 @endsection
