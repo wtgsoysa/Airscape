@@ -61,3 +61,7 @@ Route::get('/user/home', function () {
 Route::get('/user/about', function () {
     return view('pages.user.about');
 })->name('user.about');
+
+Route::get('/user/contact', function () {
+    return view('pages.user.contact');
+})->name('user.contact');
