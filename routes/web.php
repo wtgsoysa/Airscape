@@ -57,3 +57,7 @@ Route::get('/admin/alert-configuration', function () {
 Route::get('/user/home', function () {
     return view('pages.user.home');
 })->name('user.home');
+
+Route::get('/user/about', function () {
+    return view('pages.user.about');
+})->name('user.about');
