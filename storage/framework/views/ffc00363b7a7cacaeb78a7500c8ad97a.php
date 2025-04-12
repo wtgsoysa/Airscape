@@ -120,6 +120,9 @@
 
             <form action="<?php echo e(route('admin.user-management.store')); ?>" method="POST">
                 <?php echo csrf_field(); ?>
+
+                <input type="hidden" name="role" value="admin"> 
+
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
                     <input type="text" name="name" class="form-control" placeholder="Enter full name" required>
@@ -136,12 +139,6 @@
                 </div>
 
                 <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <label class="form-label">Role</label>
-                        <select name="role" class="form-select" required>
-                            <option value="admin">Admin</option>
-                        </select>
-                    </div>
                     <div class="col-md-6">
                         <label class="form-label">Status</label>
                         <select name="status" class="form-select" required>

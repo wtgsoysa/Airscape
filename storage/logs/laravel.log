@@ -482,3 +482,19 @@
 #49 F:\\University\\SDTP\\Airscape\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(23): require_once('F:\\\\University\\\\S...')
 #50 {main}
 "} 
+[2025-04-12 22:20:28] local.ERROR: Cannot redeclare class App\Http\Controllers\AdminUserController (previously declared in F:\University\SDTP\Airscape\app\Http\Controllers\Admin\AdminUserController.php:9) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class App\\Http\\Controllers\\AdminUserController (previously declared in F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9) at F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9)
+[stacktrace]
+#0 {main}
+"} 
+[2025-04-12 22:23:02] local.ERROR: Cannot redeclare class App\Http\Controllers\AdminUserController (previously declared in F:\University\SDTP\Airscape\app\Http\Controllers\Admin\AdminUserController.php:9) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class App\\Http\\Controllers\\AdminUserController (previously declared in F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9) at F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9)
+[stacktrace]
+#0 {main}
+"} 
+[2025-04-12 22:23:43] local.ERROR: Cannot redeclare class App\Http\Controllers\AdminUserController (previously declared in F:\University\SDTP\Airscape\app\Http\Controllers\Admin\AdminUserController.php:9) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class App\\Http\\Controllers\\AdminUserController (previously declared in F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9) at F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9)
+[stacktrace]
+#0 {main}
+"} 
+[2025-04-12 22:24:32] local.ERROR: Cannot redeclare class App\Http\Controllers\AdminUserController (previously declared in F:\University\SDTP\Airscape\app\Http\Controllers\Admin\AdminUserController.php:9) {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Cannot redeclare class App\\Http\\Controllers\\AdminUserController (previously declared in F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9) at F:\\University\\SDTP\\Airscape\\app\\Http\\Controllers\\Admin\\AdminUserController.php:9)
+[stacktrace]
+#0 {main}
+"} 

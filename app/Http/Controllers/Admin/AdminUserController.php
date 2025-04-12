@@ -32,14 +32,18 @@ class AdminUserController extends Controller
             'status'   => 'required|in:Active,Inactive',
         ]);
 
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => 'admin',
-            'status'   => $request->status,
-        ]);
+        $data = $request->only(['name', 'email', 'password', 'status']);
+        $data['role'] = 'admin';
+        $data['password'] = Hash::make($data['password']);
+
+        User::create($data);
 
         return redirect()->route('admin.user-management')->with('success', 'Admin added successfully.');
     }
+
+    
+
+
 }
+
+
