@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .admin-table .avatar {
         width: 38px;
@@ -78,22 +76,23 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($admins as $admin)
+                <?php $__currentLoopData = $admins; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $admin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr class="admin-row">
                     <td class="d-flex align-items-center gap-3">
                         <div class="avatar"><i class="bi bi-person"></i></div>
                         <div>
-                            <div class="fw-semibold">{{ $admin->name }}</div>
-                            <div class="text-muted small">{{ $admin->email }}</div>
+                            <div class="fw-semibold"><?php echo e($admin->name); ?></div>
+                            <div class="text-muted small"><?php echo e($admin->email); ?></div>
                         </div>
                     </td>
                     <td>
-                        <span class="badge-status {{ $admin->status === 'Active' ? 'badge-active' : 'badge-inactive' }}">
-                            {{ $admin->status }}
+                        <span class="badge-status <?php echo e($admin->status === 'Active' ? 'badge-active' : 'badge-inactive'); ?>">
+                            <?php echo e($admin->status); ?>
+
                         </span>
                     </td>
-                    <td>{{ $admin->created_at->format('m/d/Y') }}</td>
-                    <td>{{ ucfirst($admin->role) }}</td>
+                    <td><?php echo e($admin->created_at->format('m/d/Y')); ?></td>
+                    <td><?php echo e(ucfirst($admin->role)); ?></td>
                     <td>
                         <div class="dropdown">
                             <button class="btn border-0" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
@@ -104,7 +103,7 @@
                         </div>
                     </td>
                 </tr>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>
         </table>
     </div>
@@ -119,8 +118,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <form action="{{ route('admin.user-management.store') }}" method="POST">
-                @csrf
+            <form action="<?php echo e(route('admin.user-management.store')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
                     <input type="text" name="name" class="form-control" placeholder="Enter full name" required>
@@ -159,4 +158,6 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\University\SDTP\Airscape\resources\views/admin/partials/user-management.blade.php ENDPATH**/ ?>

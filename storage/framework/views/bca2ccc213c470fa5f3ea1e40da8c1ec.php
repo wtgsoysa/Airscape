@@ -116,10 +116,10 @@
         <div class="row g-4">
             <?php
                 $team = [
-                    ['name' => 'Akila Lakshitha', 'role' => 'Frontend Developer', 'img' => '/assets/user1.jpg'],
-                    ['name' => 'Thanuga Soysa', 'role' => 'Backend Developer', 'img' => '/assets/user2.jpg'],
-                    ['name' => 'Janudi Meegoda', 'role' => 'UI/UX Designer', 'img' => '/assets/user3.jpg'],
-                    ['name' => 'Yenuli Tharandi', 'role' => 'QA & Research', 'img' => '/assets/user4.jpg'],
+                    ['name' => 'Akila Lakshitha', 'role' => 'Frontend Developer', 'img' => asset('assests/team1.jpg')],
+                    ['name' => 'Thanuga Soysa', 'role' => 'Backend Developer', 'img' => asset('assests/team1.jpg')],
+                    ['name' => 'Janudi Meegoda', 'role' => 'UI/UX Designer', 'img' => asset('assets/user3.jpg')],
+                    ['name' => 'Yenuli Tharandi', 'role' => 'QA & Research', 'img' => asset('assets/user4.jpg')],
                 ];
             ?>
 
@@ -136,4 +136,5 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
+
 <?php echo $__env->make('layouts.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\University\SDTP\Airscape\resources\views/pages/user/about.blade.php ENDPATH**/ ?>

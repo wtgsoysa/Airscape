@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 // ───── Default User Redirect ─────
 Route::redirect('/', '/user/home');
@@ -65,3 +66,10 @@ Route::get('/user/about', function () {
 Route::get('/user/contact', function () {
     return view('pages.user.contact');
 })->name('user.contact');
+
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/user-management', [AdminUserController::class, 'index'])->name('admin.user-management');
+    Route::post('/admin/user-management/add', [AdminUserController::class, 'store'])->name('admin.user-management.store');
+});
