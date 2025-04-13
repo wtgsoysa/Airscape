@@ -41,6 +41,32 @@ class AdminUserController extends Controller
         return redirect()->route('admin.user-management')->with('success', 'Admin added successfully.');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,'.$id,
+        ]);
+
+        $admin = User::findOrFail($id);
+        $admin->update([
+            'name' => $request->name,
+            'email' => $request->email,
+        ]);
+
+        return back()->with('success', 'Admin updated successfully.');
+    }
+
+    public function deactivate($id)
+    {
+        $admin = User::findOrFail($id);
+        $admin->status = 'Inactive';
+        $admin->save();
+
+        return back()->with('success', 'Admin deactivated.');
+    }
+
+
     
 
 
