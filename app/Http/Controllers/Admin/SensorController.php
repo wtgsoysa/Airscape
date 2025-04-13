@@ -31,8 +31,9 @@ class SensorController extends Controller
 
     public function fetchLive()
     {
-        $sensors = Sensor::all(['name', 'location', 'status', 'latitude', 'longitude', 'simulated_aqi', 'last_updated']);
-        return response()->json($sensors);
+        return response()->json(Sensor::select([
+            'name', 'location', 'status', 'latitude', 'longitude', 'simulated_aqi', 'frequency', 'variation', 'last_updated'
+        ])->get());
     }
 
 
