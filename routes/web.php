@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\SensorController;
 
 // ───── Default User Redirect ─────
 Route::redirect('/', '/user/home');
@@ -11,7 +12,6 @@ Route::redirect('/', '/user/home');
 Route::get('/admin', [AuthController::class, 'showRoleSelect'])->name('admin.role');
 Route::get('/admin/login/webmaster', [AuthController::class, 'showWebmasterLogin'])->name('login.webmaster');
 Route::post('/admin/login/webmaster', [AuthController::class, 'loginWebmaster'])->name('login.webmaster.submit');
-
 Route::get('/admin/login/monitor', [AuthController::class, 'showAdminLogin'])->name('login.admin');
 Route::post('/admin/login/monitor', [AuthController::class, 'loginAdmin'])->name('login.admin.submit');
 
@@ -23,17 +23,25 @@ Route::middleware(['auth'])->get('/admin/dashboard', function () {
 // ───── Logout ─────
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// ───── Admin Pages (static views) ─────
-Route::view('/admin/sensors', 'pages.admin.sensors')->name('admin.sensors');
+// ───── Admin Pages ─────
 Route::view('/admin/data-management', 'pages.admin.data-management')->name('admin.data-management');
 Route::view('/admin/alert-configuration', 'pages.admin.alert-configuration')->name('alert.configuration');
 
-// ✅ AdminUser Management (Web Master only)
+// ───── AdminUser Management ─────
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/user-management', [AdminUserController::class, 'index'])->name('admin.user-management');
     Route::post('/admin/user-management', [AdminUserController::class, 'store'])->name('admin.user-management.store');
     Route::put('/admin/user-management/{id}', [AdminUserController::class, 'update'])->name('admin.user-management.update');
     Route::delete('/admin/user-management/{id}', [AdminUserController::class, 'destroy'])->name('admin.user-management.delete');
+});
+
+// ───── Sensor Management ─────
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/sensors', [SensorController::class, 'index'])->name('admin.sensors');
+    Route::post('/admin/sensors', [SensorController::class, 'store'])->name('admin.sensors.store');
+    Route::delete('/admin/sensors/{id}', [SensorController::class, 'destroy'])->name('admin.sensors.delete');
+    Route::get('/admin/simulate-aqi', [SensorController::class, 'simulateAQI'])->name('admin.sensors.simulate');
+    Route::get('/admin/sensors/live', [SensorController::class, 'getLiveSensors'])->name('admin.sensors.live'); // ✅ NEW: live popup refresh route
 });
 
 // ───── User Public Routes ─────
