@@ -8,6 +8,7 @@
         color: #003B3B;
         margin-bottom: 24px;
     }
+
     .sensor-card {
         background-color: #f0f9f0;
         padding: 24px;
@@ -16,6 +17,7 @@
         width: 100%;
         position: relative;
     }
+
     .sensor-id {
         position: absolute;
         top: 14px;
@@ -24,6 +26,7 @@
         font-weight: 600;
         color: #777;
     }
+
     .status-badge {
         background-color: #45d16a;
         color: white;
@@ -32,6 +35,7 @@
         padding: 4px 12px;
         font-weight: 500;
     }
+
     .btn-add {
         background-color: #007872;
         color: white;
@@ -40,26 +44,32 @@
         font-weight: 500;
         border-radius: 8px;
     }
+
     .btn-add:hover {
         background-color: #00635f;
     }
+
     .modal-content {
         border-radius: 16px;
     }
+
     .page-wrapper {
         background-color: #ffffff;
         padding: 40px;
         min-height: 100vh;
     }
+
     #map {
         height: 500px;
         width: 100%;
         border-radius: 12px;
     }
+
     .sensor-scroll {
         max-height: 500px;
         overflow-y: auto;
     }
+
     .delete-icon {
         position: absolute;
         bottom: 16px;
@@ -67,8 +77,32 @@
         cursor: pointer;
         color: #d62828;
     }
+
     .delete-icon:hover {
         color: #a11d1d;
+    }
+
+    .popup-aqi {
+        font-weight: bold;
+        padding: 4px 8px;
+        border-radius: 6px;
+        color: #fff;
+    }
+
+    .popup-aqi.good {
+        background-color: #45d16a;
+    }
+
+    .popup-aqi.moderate {
+        background-color: #ffc107;
+    }
+
+    .popup-aqi.unhealthy {
+        background-color: #ff5722;
+    }
+
+    .popup-aqi.hazardous {
+        background-color: #d32f2f;
     }
 </style>
 
@@ -105,6 +139,8 @@
     </div>
 </div>
 
+<!-- Add Sensor Modal (unchanged from your code) -->
+<!-- Keep this as-is unless you want me to enhance it -->
 <!-- Add Sensor Modal -->
 <div class="modal fade" id="addSensorModal" tabindex="-1" aria-labelledby="addSensorModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -178,28 +214,26 @@
 
     const sensors = @json($sensors);
 
-    function getAQIStatus(aqi) {
-        if (aqi <= 50) return '🟢 Good';
-        if (aqi <= 100) return '🟡 Moderate';
-        if (aqi <= 150) return '🟠 Unhealthy for Sensitive Groups';
-        if (aqi <= 200) return '🔴 Unhealthy';
-        if (aqi <= 300) return '🟣 Very Unhealthy';
-        return '⚫ Hazardous';
+    function getAQILevel(aqi) {
+        if (aqi <= 50) return { level: 'Good', color: 'good', note: 'Air quality is satisfactory.' };
+        if (aqi <= 100) return { level: 'Moderate', color: 'moderate', note: 'Moderate health concern.' };
+        if (aqi <= 200) return { level: 'Unhealthy', color: 'unhealthy', note: 'Unhealthy for sensitive groups.' };
+        return { level: 'Hazardous', color: 'hazardous', note: 'Health alert for all.' };
     }
 
     sensors.forEach(sensor => {
-        const aqiStatus = getAQIStatus(sensor.simulated_aqi);
-
+        const aqiData = getAQILevel(sensor.current_aqi);
         const popupContent = `
-            <div style="font-family:'Segoe UI'; font-size:14px;">
-                <h6 class="fw-bold mb-1">🚨 ${sensor.name}</h6>
-                <div><strong>📍 Location:</strong> ${sensor.location}</div>
-                <div><strong>📊 AQI:</strong> ${sensor.simulated_aqi} <span>${aqiStatus}</span></div>
-                <div><strong>📌 Status:</strong> ${sensor.status}</div>
-                <div><strong>🕒 Updated:</strong> ${sensor.last_updated}</div>
-                <hr>
-                <div style="color:#d62828;"><strong>Risk:</strong> High for all groups</div>
-                <div style="color:#007872;"><strong>Tip:</strong> Avoid outdoor activity. Mask is recommended.</div>
+            <div style="font-size: 14px;">
+                <h6>🚨 ${sensor.name}</h6>
+                <p><strong>Location:</strong> ${sensor.location}</p>
+                <p><strong>Status:</strong> ${sensor.status}</p>
+                <p><strong>AQI:</strong> <span class="popup-aqi ${aqiData.color}">${sensor.current_aqi} (${aqiData.level})</span></p>
+                <p><strong>Update Frequency:</strong> Every ${sensor.frequency} min</p>
+                <p><strong>Variation:</strong> ±${sensor.variation}%</p>
+                <p><strong>Last Updated:</strong> ${sensor.last_updated}</p>
+                <p><strong>Risk Level:</strong> ${aqiData.level === 'Hazardous' ? 'Very High' : aqiData.level}</p>
+                <p><strong>Recommendation:</strong> ${aqiData.note}</p>
             </div>
         `;
 
