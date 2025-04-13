@@ -1,5 +1,5 @@
 <?php $__env->startSection('content'); ?>
-<?php echo $__env->make('partials.alerts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?> 
+<?php echo $__env->make('partials.alerts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <style>
     .admin-table .avatar {
@@ -13,28 +13,23 @@
         font-size: 18px;
         color: #007872;
     }
-
     .admin-table td {
         vertical-align: middle;
     }
-
     .badge-status {
         padding: 5px 12px;
         border-radius: 12px;
         font-size: 14px;
         font-weight: 500;
     }
-
     .badge-active {
         background-color: #45d16a;
         color: white;
     }
-
     .badge-inactive {
         background-color: #ff6b6b;
         color: white;
     }
-
     .btn-add-admin {
         background-color: #007872;
         color: white;
@@ -42,19 +37,15 @@
         padding: 8px 20px;
         border-radius: 10px;
     }
-
     .modal-content {
         border-radius: 16px;
     }
-
     .admin-row {
         background-color: #f6fdf9;
     }
-
     .admin-row:not(:last-child) {
         border-bottom: 1px solid #e1f2ec;
     }
-
     .table-no-border td, .table-no-border th {
         border: none !important;
     }
@@ -101,10 +92,10 @@
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editAdminModal-<?php echo e($admin->id); ?>">Edit</a></li>
                                 <li>
-                                    <form action="<?php echo e(route('admin.user-management.deactivate', $admin->id)); ?>" method="POST" onsubmit="return confirmDeactivate(this)">
+                                    <form action="<?php echo e(route('admin.user-management.delete', $admin->id)); ?>" method="POST" onsubmit="return confirmDelete(this)">
                                         <?php echo csrf_field(); ?>
-                                        <?php echo method_field('PATCH'); ?>
-                                        <button class="dropdown-item text-danger" type="submit">Deactivate</button>
+                                        <?php echo method_field('DELETE'); ?>
+                                        <button class="dropdown-item text-danger" type="submit">Delete</button>
                                     </form>
                                 </li>
                             </ul>
@@ -123,17 +114,14 @@
                             <form action="<?php echo e(route('admin.user-management.update', $admin->id)); ?>" method="POST">
                                 <?php echo csrf_field(); ?>
                                 <?php echo method_field('PUT'); ?>
-
                                 <div class="mb-3">
                                     <label class="form-label">Full Name</label>
                                     <input type="text" name="name" class="form-control" value="<?php echo e($admin->name); ?>" required>
                                 </div>
-
                                 <div class="mb-3">
                                     <label class="form-label">E-mail</label>
                                     <input type="email" name="email" class="form-control" value="<?php echo e($admin->email); ?>" required>
                                 </div>
-
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Status</label>
@@ -143,7 +131,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-add-admin">Update</button>
                                 </div>
@@ -157,17 +144,16 @@
     </div>
 </div>
 
-<!-- SweetAlert -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-function confirmDeactivate(form) {
+function confirmDelete(form) {
     event.preventDefault();
     Swal.fire({
         title: 'Are you sure?',
-        text: "This will deactivate the admin.",
+        text: "You are about to permanently delete this admin.",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, deactivate!',
+        confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'Cancel'
     }).then((result) => {
         if (result.isConfirmed) {
