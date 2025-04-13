@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .section-title {
         font-size: 22px;
@@ -118,23 +116,23 @@
         </div>
 
         <div class="col-lg-5 sensor-scroll">
-            @foreach($sensors as $sensor)
+            <?php $__currentLoopData = $sensors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sensor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <div class="sensor-card mb-4">
-                <div class="sensor-id">#{{ $sensor->sensor_id }}</div>
+                <div class="sensor-id">#<?php echo e($sensor->sensor_id); ?></div>
                 <div><strong>City</strong></div>
-                <div>{{ $sensor->location }}</div>
+                <div><?php echo e($sensor->location); ?></div>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div><strong>Status</strong>
-                        <span class="status-badge ms-2">{{ $sensor->status }}</span>
+                        <span class="status-badge ms-2"><?php echo e($sensor->status); ?></span>
                     </div>
                 </div>
-                <form method="POST" action="{{ route('admin.sensors.delete', $sensor->id) }}">
-                    @csrf
-                    @method('DELETE')
+                <form method="POST" action="<?php echo e(route('admin.sensors.delete', $sensor->id)); ?>">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
                     <button type="submit" class="delete-icon border-0 bg-transparent"><i class="bi bi-trash-fill" title="Delete"></i></button>
                 </form>
             </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </div>
 </div>
@@ -151,8 +149,8 @@
             </div>
             <p class="text-muted mb-4">Add a new sensor to your city</p>
 
-            <form method="POST" action="{{ route('admin.sensors.store') }}">
-                @csrf
+            <form method="POST" action="<?php echo e(route('admin.sensors.store')); ?>">
+                <?php echo csrf_field(); ?>
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label class="form-label">Sensor Name</label>
@@ -202,9 +200,9 @@
         </div>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     const map = L.map('map').setView([6.85, 79.88], 11);
@@ -212,7 +210,7 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const sensors = @json($sensors);
+    const sensors = <?php echo json_encode($sensors, 15, 512) ?>;
 
     function getAQILevel(aqi) {
         if (aqi <= 50) return { level: 'Good', color: 'good', note: 'Air quality is satisfactory.' };
@@ -242,4 +240,6 @@
             .bindPopup(popupContent);
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Users\Dinuli Nethmini\Desktop\Uni Works\Y2 S2\SQA\Airscape\Airscape\resources\views/pages/admin/sensors.blade.php ENDPATH**/ ?>
