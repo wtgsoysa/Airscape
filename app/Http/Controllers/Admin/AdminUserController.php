@@ -43,33 +43,29 @@ class AdminUserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $admin = User::where('role', 'admin')->findOrFail($id);
+
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,'.$id,
+            'name'   => 'required|string|max:255',
+            'email'  => 'required|email|unique:users,email,' . $id,
+            'status' => 'required|in:Active,Inactive',
         ]);
 
-        $admin = User::findOrFail($id);
-        $admin->update([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
+        $admin->update($request->only(['name', 'email', 'status']));
 
-        return back()->with('success', 'Admin updated successfully.');
+        return redirect()->route('admin.user-management')->with('success', 'Admin updated successfully.');
     }
 
-    public function deactivate($id)
+    public function destroy($id)
     {
-        $admin = User::findOrFail($id);
-        $admin->status = 'Inactive';
-        $admin->save();
-
-        return back()->with('success', 'Admin deactivated.');
-    }
-
-
+        if (auth()->user()->role !== 'webmaster') {
+            abort(403);
+        }
     
-
-
+        $admin = User::where('role', 'admin')->findOrFail($id);
+        $admin->delete();
+    
+        return redirect()->route('admin.user-management')->with('success', 'Admin deleted successfully.');
+    }
+    
 }
-
-
