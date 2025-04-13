@@ -1,3 +1,4 @@
+@php use Illuminate\Support\Facades\Auth; @endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -95,7 +96,7 @@
 <div class="sidebar d-flex flex-column justify-content-between">
     <div>
         <div class="logo">
-         <div class="logo"><img src="/assests/Logo White.svg" alt=""></div>
+            <img src="/assests/Logo White.svg" alt="">
         </div>
         <a href="/admin/dashboard">Dashboard</a>
         <a href="/admin/sensors">Sensor Management</a>
@@ -104,7 +105,7 @@
         <a href="/admin/alert-configuration">Alert Configuration</a>
     </div>
     <div class="px-3">
-    <a href="/admin" class="logout-btn d-inline-block text-decoration-none">Logout</a>
+        <a href="/admin" class="logout-btn d-inline-block text-decoration-none">Logout</a>
         <div class="text-white small mt-4 px-2">© 2025 airscape - All Rights Reserved.</div>
     </div>
 </div>
@@ -112,10 +113,12 @@
 <!-- Main Content -->
 <div class="content">
     <div class="topbar">
-        <div class="user-badge me-2">
-            Akila Lakshitha
-            <i class="bi bi-person-circle"></i>
-        </div>
+        @if(Auth::check())
+            <div class="user-badge me-2">
+                {{ Auth::user()->name }}
+                <i class="bi bi-person-circle"></i>
+            </div>
+        @endif
     </div>
 
     @yield('content')
