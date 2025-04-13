@@ -13,13 +13,15 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('simulate:aqi')->everyMinute();
+        // Automatically simulate AQI every minute using timezone
+        $schedule->command('simulate:aqi')
+            ->everyMinute()
+            ->timezone('Asia/Colombo');
     }
 
     protected function commands(): void
     {
         $this->load(__DIR__ . '/Commands');
-
         require base_path('routes/console.php');
     }
 }
