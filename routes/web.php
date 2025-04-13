@@ -32,14 +32,9 @@ Route::view('/admin/alert-configuration', 'pages.admin.alert-configuration')->na
 Route::middleware(['auth'])->group(function () {
     Route::get('/admin/user-management', [AdminUserController::class, 'index'])->name('admin.user-management');
     Route::post('/admin/user-management', [AdminUserController::class, 'store'])->name('admin.user-management.store');
+    Route::put('/admin/user-management/{id}', [AdminUserController::class, 'update'])->name('admin.user-management.update');
+    Route::delete('/admin/user-management/{id}', [AdminUserController::class, 'destroy'])->name('admin.user-management.delete');
 });
-
-Route::put('/admin/user-management/{id}', [AdminUserController::class, 'update'])->name('admin.user-management.update');
-Route::delete('/admin/user-management/{id}', [AdminUserController::class, 'destroy'])->name('admin.user-management.delete');
-
-
-
-
 
 // ───── User Public Routes ─────
 Route::view('/user/home', 'pages.user.home')->name('user.home');
