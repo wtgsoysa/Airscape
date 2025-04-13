@@ -35,7 +35,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::put('/admin/user-management/{id}', [AdminUserController::class, 'update'])->name('admin.user-management.update');
-Route::patch('/admin/user-management/{id}/deactivate', [AdminUserController::class, 'deactivate'])->name('admin.user-management.deactivate');
+Route::delete('/admin/user-management/{id}', [AdminUserController::class, 'destroy'])->name('admin.user-management.delete');
+
+
 
 
 
