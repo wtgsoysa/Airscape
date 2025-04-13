@@ -34,6 +34,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/user-management', [AdminUserController::class, 'store'])->name('admin.user-management.store');
 });
 
+Route::put('/admin/user-management/{id}', [AdminUserController::class, 'update'])->name('admin.user-management.update');
+Route::patch('/admin/user-management/{id}/deactivate', [AdminUserController::class, 'deactivate'])->name('admin.user-management.deactivate');
+
+
+
 // ───── User Public Routes ─────
 Route::view('/user/home', 'pages.user.home')->name('user.home');
 Route::view('/user/about', 'pages.user.about')->name('user.about');
