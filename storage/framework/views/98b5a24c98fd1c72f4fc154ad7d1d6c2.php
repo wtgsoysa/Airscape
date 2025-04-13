@@ -1,4 +1,4 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
+<?php use Illuminate\Support\Facades\Auth; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,22 +113,24 @@
 <!-- Main Content -->
 <div class="content">
     <div class="topbar">
-        @if(Auth::check())
+        <?php if(Auth::check()): ?>
             <div class="user-badge me-2">
-                {{ Auth::user()->name }}
+                <?php echo e(Auth::user()->name); ?>
+
                 <i class="bi bi-person-circle"></i>
             </div>
-        @endif
+        <?php endif; ?>
     </div>
 
-    @yield('content')
+    <?php echo $__env->yieldContent('content'); ?>
 </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Page-specific Scripts -->
-@stack('scripts')
+<?php echo $__env->yieldPushContent('scripts'); ?>
 
 </body>
 </html>
+<?php /**PATH F:\University\SDTP\Airscape\resources\views/layouts/admin.blade.php ENDPATH**/ ?>

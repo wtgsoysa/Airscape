@@ -2,66 +2,41 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\AdminUserController;
 
 // ───── Default User Redirect ─────
 Route::redirect('/', '/user/home');
 
-
 // ───── Admin Auth Routes ─────
-
-// Role selection page
 Route::get('/admin', [AuthController::class, 'showRoleSelect'])->name('admin.role');
-
-// Web Master Login
 Route::get('/admin/login/webmaster', [AuthController::class, 'showWebmasterLogin'])->name('login.webmaster');
 Route::post('/admin/login/webmaster', [AuthController::class, 'loginWebmaster'])->name('login.webmaster.submit');
 
-// Admin Login
 Route::get('/admin/login/monitor', [AuthController::class, 'showAdminLogin'])->name('login.admin');
 Route::post('/admin/login/monitor', [AuthController::class, 'loginAdmin'])->name('login.admin.submit');
 
-// Dashboard (shared for both roles)
+// ───── Admin Dashboard ─────
 Route::middleware(['auth'])->get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('dashboard');
 
-// Logout
+// ───── Logout ─────
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-// ───── Admin Pages ─────
-
+// ───── Admin Pages (static views) ─────
 Route::view('/admin/sensors', 'pages.admin.sensors')->name('admin.sensors');
+Route::view('/admin/data-management', 'pages.admin.data-management')->name('admin.data-management');
+Route::view('/admin/alert-configuration', 'pages.admin.alert-configuration')->name('alert.configuration');
 
-Route::get('/admin/data-management', function () {
-    return view('pages.admin.data-management');
-})->name('admin.data-management');
-
-Route::get('/admin/user-management', function () {
-    if (auth()->user()->role !== 'webmaster') {
-        return view('errors.no-access');
-    }
-    return view('admin.partials.user-management');
-})->middleware('auth')->name('admin.user-management');
-
-
-
-
-Route::get('/admin/alert-configuration', function () {
-    return view('pages.admin.alert-configuration');
-})->name('alert.configuration');
-
+// ✅ AdminUser Management (Web Master only)
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/user-management', [AdminUserController::class, 'index'])->name('admin.user-management');
+    Route::post('/admin/user-management', [AdminUserController::class, 'store'])->name('admin.user-management.store');
+    Route::put('/admin/user-management/{id}', [AdminUserController::class, 'update'])->name('admin.user-management.update');
+    Route::delete('/admin/user-management/{id}', [AdminUserController::class, 'destroy'])->name('admin.user-management.delete');
+});
 
 // ───── User Public Routes ─────
-
-Route::get('/user/home', function () {
-    return view('pages.user.home');
-})->name('user.home');
-
-Route::get('/user/about', function () {
-    return view('pages.user.about');
-})->name('user.about');
-
-Route::get('/user/contact', function () {
-    return view('pages.user.contact');
-})->name('user.contact');
+Route::view('/user/home', 'pages.user.home')->name('user.home');
+Route::view('/user/about', 'pages.user.about')->name('user.about');
+Route::view('/user/contact', 'pages.user.contact')->name('user.contact');

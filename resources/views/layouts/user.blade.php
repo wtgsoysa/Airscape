@@ -64,9 +64,9 @@
         </a>
         <div class="collapse navbar-collapse justify-content-end">
             <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link" href="/user/home">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">About</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('user.home') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('user.about') }}">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('user.contact') }}">Contact</a></li>
             </ul>
         </div>
     </div>
@@ -81,9 +81,9 @@
 <footer>
     <img src="/assests/Logo.svg" alt="Airscape Logo">
     <div class="mt-3">
-        <a href="#">Home</a> |
-        <a href="#">About</a> |
-        <a href="#">Contact</a>
+        <a href="{{ route('user.home') }}">Home</a> |
+        <a href="{{ route('user.about') }}">About</a> |
+        <a href="{{ route('user.contact') }}">Contact</a>
     </div>
     <div class="mt-2 text-muted small">© 2025 airscape - All Rights Reserved.</div>
 </footer>

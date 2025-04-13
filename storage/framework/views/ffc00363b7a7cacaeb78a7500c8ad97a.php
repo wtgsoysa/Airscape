@@ -1,7 +1,5 @@
-@extends('layouts.admin')
-
-@section('content')
-@include('partials.alerts')
+<?php $__env->startSection('content'); ?>
+<?php echo $__env->make('partials.alerts', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 <style>
     .admin-table .avatar {
@@ -80,31 +78,32 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($admins as $admin)
+                <?php $__currentLoopData = $admins; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $admin): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <tr class="admin-row">
                     <td class="d-flex align-items-center gap-3">
                         <div class="avatar"><i class="bi bi-person"></i></div>
                         <div>
-                            <div class="fw-semibold">{{ $admin->name }}</div>
-                            <div class="text-muted small">{{ $admin->email }}</div>
+                            <div class="fw-semibold"><?php echo e($admin->name); ?></div>
+                            <div class="text-muted small"><?php echo e($admin->email); ?></div>
                         </div>
                     </td>
                     <td>
-                        <span class="badge-status {{ $admin->status === 'Active' ? 'badge-active' : 'badge-inactive' }}">
-                            {{ $admin->status }}
+                        <span class="badge-status <?php echo e($admin->status === 'Active' ? 'badge-active' : 'badge-inactive'); ?>">
+                            <?php echo e($admin->status); ?>
+
                         </span>
                     </td>
-                    <td>{{ $admin->created_at->format('m/d/Y') }}</td>
-                    <td>{{ ucfirst($admin->role) }}</td>
+                    <td><?php echo e($admin->created_at->format('m/d/Y')); ?></td>
+                    <td><?php echo e(ucfirst($admin->role)); ?></td>
                     <td>
                         <div class="dropdown">
                             <button class="btn border-0" data-bs-toggle="dropdown"><i class="bi bi-three-dots-vertical"></i></button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editAdminModal-{{ $admin->id }}">Edit</a></li>
+                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editAdminModal-<?php echo e($admin->id); ?>">Edit</a></li>
                                 <li>
-                                    <form action="{{ route('admin.user-management.delete', $admin->id) }}" method="POST" onsubmit="return confirmDelete(this)">
-                                        @csrf
-                                        @method('DELETE')
+                                    <form action="<?php echo e(route('admin.user-management.delete', $admin->id)); ?>" method="POST" onsubmit="return confirmDelete(this)">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
                                         <button class="dropdown-item text-danger" type="submit">Delete</button>
                                     </form>
                                 </li>
@@ -114,30 +113,30 @@
                 </tr>
 
                 <!-- Edit Modal -->
-                <div class="modal fade" id="editAdminModal-{{ $admin->id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal fade" id="editAdminModal-<?php echo e($admin->id); ?>" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content p-4">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <h5 class="fw-bold text-teal">Edit Admin</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                             </div>
-                            <form action="{{ route('admin.user-management.update', $admin->id) }}" method="POST">
-                                @csrf
-                                @method('PUT')
+                            <form action="<?php echo e(route('admin.user-management.update', $admin->id)); ?>" method="POST">
+                                <?php echo csrf_field(); ?>
+                                <?php echo method_field('PUT'); ?>
                                 <div class="mb-3">
                                     <label class="form-label">Full Name</label>
-                                    <input type="text" name="name" class="form-control" value="{{ $admin->name }}" required>
+                                    <input type="text" name="name" class="form-control" value="<?php echo e($admin->name); ?>" required>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">E-mail</label>
-                                    <input type="email" name="email" class="form-control" value="{{ $admin->email }}" required>
+                                    <input type="email" name="email" class="form-control" value="<?php echo e($admin->email); ?>" required>
                                 </div>
                                 <div class="row g-3 mb-3">
                                     <div class="col-md-6">
                                         <label class="form-label">Status</label>
                                         <select name="status" class="form-select" required>
-                                            <option value="Active" {{ $admin->status === 'Active' ? 'selected' : '' }}>Active</option>
-                                            <option value="Inactive" {{ $admin->status === 'Inactive' ? 'selected' : '' }}>Inactive</option>
+                                            <option value="Active" <?php echo e($admin->status === 'Active' ? 'selected' : ''); ?>>Active</option>
+                                            <option value="Inactive" <?php echo e($admin->status === 'Inactive' ? 'selected' : ''); ?>>Inactive</option>
                                         </select>
                                     </div>
                                 </div>
@@ -148,7 +147,7 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </tbody>
         </table>
     </div>
@@ -162,8 +161,8 @@
                 <h5 class="fw-bold text-teal">New Admin</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('admin.user-management.store') }}" method="POST">
-                @csrf
+            <form action="<?php echo e(route('admin.user-management.store')); ?>" method="POST">
+                <?php echo csrf_field(); ?>
                 <input type="hidden" name="role" value="admin">
                 <div class="mb-3">
                     <label class="form-label">Full Name</label>
@@ -212,4 +211,6 @@ function confirmDelete(form) {
     return false;
 }
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\University\SDTP\Airscape\resources\views/admin/partials/user-management.blade.php ENDPATH**/ ?>
