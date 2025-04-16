@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\SensorController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\DataController; // ✅ Import DataController
+use App\Http\Controllers\Admin\DataController; 
+use App\Http\Controllers\Admin\AlertController;
+use App\Http\Controllers\User\SensorDisplayController;
 
 // ───── Default User Redirect ─────
 Route::redirect('/', '/user/home');
@@ -50,7 +52,20 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/sensors/live', [SensorController::class, 'getLiveSensors'])->name('admin.sensors.live');
 });
 
+// ------- Alert ----------------
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/alert-configuration', [AlertController::class, 'index'])->name('alert.configuration');
+    Route::post('/admin/alert-configuration', [AlertController::class, 'store'])->name('alert.configuration.store');
+    Route::delete('/admin/alert-configuration/{id}', [AlertController::class, 'destroy'])->name('alert.configuration.delete');
+    Route::delete('/admin/system-alerts/{id}', [AlertController::class, 'deleteSystemAlert'])->name('alert.system.delete');
+
+});
+
+
 // ───── User Public Routes ─────
-Route::view('/user/home', 'pages.user.home')->name('user.home');
+
+
+Route::get('/user/home', [SensorDisplayController::class, 'index'])->name('user.home');
+
 Route::view('/user/about', 'pages.user.about')->name('user.about');
 Route::view('/user/contact', 'pages.user.contact')->name('user.contact');
