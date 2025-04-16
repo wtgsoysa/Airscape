@@ -2,73 +2,154 @@
 
 @section('content')
 <style>
-    .dashboard-status-card {
-        background-color: #f0f9f0;
-        border-radius: 12px;
-        padding: 20px 24px;
-        border: 1px solid #d9ede8;
+    .dashboard-wrapper {
+        padding: 40px;
+        background: linear-gradient(135deg, #e7f5f2, #ffffff);
+        min-height: 100vh;
+        animation: fadeIn 1s ease-in-out;
     }
 
-    .dashboard-status-card .title {
-        font-weight: 600;
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dashboard-header {
+        font-size: 26px;
+        font-weight: 700;
         color: #003B3B;
-    }
-
-    .status-badge {
-        background-color: #45d16a;
-        color: white;
-        border-radius: 12px;
-        font-size: 14px;
-        padding: 4px 10px;
-        font-weight: 500;
-    }
-
-    .see-more {
-        font-size: 14px;
-        font-weight: 500;
-        color: #005b5b;
-        text-decoration: none;
-    }
-
-    .see-more:hover {
-        text-decoration: underline;
-    }
-
-    .dashboard-heading {
-        font-size: 22px;
-        font-weight: 600;
-        margin-bottom: 24px;
-        color: #003B3B;
-    }
-
-    .aqi-data-row {
+        margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 10px;
-        font-size: 16px;
+    }
+
+    .dashboard-header a {
+        font-size: 14px;
+        color: #007872;
+        text-decoration: none;
         font-weight: 500;
+    }
+
+    .sensor-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-top: 20px;
+    }
+
+    .sensor-tile {
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(0, 120, 114, 0.1);
+        padding: 24px;
+        position: relative;
+        transition: transform 0.3s ease;
+        animation: popUp 0.6s ease;
+    }
+
+    .sensor-tile:hover {
+        transform: translateY(-5px);
+    }
+
+    @keyframes popUp {
+        from { transform: scale(0.95); opacity: 0; }
+        to { transform: scale(1); opacity: 1; }
+    }
+
+    .sensor-title {
+        font-weight: 600;
+        font-size: 18px;
+        color: #007872;
+    }
+
+    .sensor-meta {
+        font-size: 14px;
+        color: #666;
+        margin-top: 4px;
+    }
+
+    .condition-badge {
+        padding: 6px 8px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 10px;
+        color: #fff;
+    }
+
+    .good { background-color: #45d16a; }
+    .moderate { background-color: #f1c232; }
+    .unhealthy { background-color: #e76f51; }
+    .hazardous { background-color: #8b0000; }
+
+    .progress-track {
+        width: 100%;
+        background-color: #f0f0f0;
+        height: 8px;
+        border-radius: 4px;
+        margin-top: 12px;
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+
+    .last-updated {
+        font-size: 12px;
+        margin-top: 12px;
+        color: #999;
     }
 </style>
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="dashboard-heading">Dashboard</h2>
-        <a href="#" class="see-more">see more</a>
+<div class="dashboard-wrapper">
+    <div class="dashboard-header">
+        <div> Realtime Sensor Overview</div>
+        <a href="{{ route('admin.sensors') }}">Manage Sensors →</a>
     </div>
 
-    <h6 class="text-muted mb-3">Status</h6>
+    <div class="sensor-grid">
+        @foreach($sensors as $sensor)
+            @php
+                $aqi = $sensor->simulated_aqi;
+                $condition = $badgeClass = $barColor = '';
 
-    <div class="dashboard-status-card">
-        <div><strong>City</strong></div>
-        <div>Colombo Metropolitan Area</div>
+                if ($aqi <= 50) {
+                    $condition = 'Good';
+                    $badgeClass = 'good';
+                    $barColor = '#45d16a';
+                } elseif ($aqi <= 100) {
+                    $condition = 'Moderate';
+                    $badgeClass = 'moderate';
+                    $barColor = '#f1c232';
+                } elseif ($aqi <= 200) {
+                    $condition = 'Unhealthy';
+                    $badgeClass = 'unhealthy';
+                    $barColor = '#e76f51';
+                } else {
+                    $condition = 'Hazardous';
+                    $badgeClass = 'hazardous';
+                    $barColor = '#8b0000';
+                }
+            @endphp
 
-        <div class="aqi-data-row mt-3">
-            <div><strong>Condition</strong> <span class="status-badge ms-2">Good</span></div>
-            <div><strong>AQI</strong> <span class="ms-2">27</span></div>
-        </div>
+            <div class="sensor-tile">
+                <div class="sensor-title">{{ $sensor->name }}</div>
+                <div class="sensor-meta">📍 {{ $sensor->location }}</div>
+
+                <div class="condition-badge {{ $badgeClass }}">{{ $condition }}</div>
+                <div class="progress-track">
+                    <div class="progress-fill" style="width: {{ min($aqi, 300) / 3 }}%; background-color: {{ $barColor }};"></div>
+                </div>
+
+                <div class="aqi-value mt-2">AQI: <strong>{{ $aqi }}</strong></div>
+                <div class="last-updated">🕒 {{ \Carbon\Carbon::parse($sensor->last_updated)->diffForHumans() }}</div>
+            </div>
+        @endforeach
     </div>
-
-    
 </div>
 @endsection
