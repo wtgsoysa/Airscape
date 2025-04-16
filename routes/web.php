@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\AdminUserController;
 use App\Http\Controllers\Admin\SensorController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DataController; // ✅ Import DataController
 
 // ───── Default User Redirect ─────
 Route::redirect('/', '/user/home');
@@ -16,15 +18,19 @@ Route::get('/admin/login/monitor', [AuthController::class, 'showAdminLogin'])->n
 Route::post('/admin/login/monitor', [AuthController::class, 'loginAdmin'])->name('login.admin.submit');
 
 // ───── Admin Dashboard ─────
-Route::middleware(['auth'])->get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('dashboard');
+Route::middleware(['auth'])->get('/admin/dashboard', [DashboardController::class, 'dashboardView'])->name('dashboard');
 
 // ───── Logout ─────
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// ───── Admin Pages ─────
-Route::view('/admin/data-management', 'pages.admin.data-management')->name('admin.data-management');
+// ───── Data Management ─────
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/data-management', [DataController::class, 'index'])->name('admin.data-management');
+    Route::get('/admin/data-management/filter', [DataController::class, 'filter'])->name('admin.data-management.filter');
+    Route::get('/admin/data-management/export', [DataController::class, 'exportCsv'])->name('admin.data-management.export');
+});
+
+// ───── Alert Configuration ─────
 Route::view('/admin/alert-configuration', 'pages.admin.alert-configuration')->name('alert.configuration');
 
 // ───── AdminUser Management ─────
@@ -41,7 +47,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/sensors', [SensorController::class, 'store'])->name('admin.sensors.store');
     Route::delete('/admin/sensors/{id}', [SensorController::class, 'destroy'])->name('admin.sensors.delete');
     Route::get('/admin/simulate-aqi', [SensorController::class, 'simulateAQI'])->name('admin.sensors.simulate');
-    Route::get('/admin/sensors/live', [SensorController::class, 'getLiveSensors'])->name('admin.sensors.live'); // ✅ NEW: live popup refresh route
+    Route::get('/admin/sensors/live', [SensorController::class, 'getLiveSensors'])->name('admin.sensors.live');
 });
 
 // ───── User Public Routes ─────
