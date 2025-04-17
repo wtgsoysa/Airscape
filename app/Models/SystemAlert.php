@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class SystemAlert extends Model
 {
-   
+    protected $fillable = ['message'];
+
     public function up()
     {
         Schema::create('system_alerts', function (Blueprint $table) {
