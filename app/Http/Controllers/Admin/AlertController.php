@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AlertRule;
 use Illuminate\Http\Request;
 use App\Models\SystemAlert;
+use Illuminate\Support\Facades\DB;
 
 class AlertController extends Controller
 {
@@ -54,9 +55,17 @@ class AlertController extends Controller
 
     public function deleteSystemAlert($id)
     {
-        DB::table('system_alerts')->where('id', $id)->delete();
+        $alert = SystemAlert::find($id);
+
+        if (!$alert) {
+            return response()->json(['error' => 'Alert not found.'], 404);
+        }
+
+        $alert->delete();
         return response()->json(['message' => 'System alert removed.']);
     }
+
+    
 
 }
 
