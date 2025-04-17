@@ -3,22 +3,20 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\AlertRule;
 use Illuminate\Http\Request;
+use App\Models\AlertRule;
 use App\Models\SystemAlert;
-use Illuminate\Support\Facades\DB;
 
 class AlertController extends Controller
 {
     public function index()
     {
         $rules = AlertRule::latest()->get();
-        $recentAlerts = SystemAlert::latest()->take(10)->get();
+        $recentAlerts = SystemAlert::where('type', 'sensor')->latest()->take(10)->get();
+
+
         return view('pages.admin.alert-configuration', compact('rules', 'recentAlerts'));
     }
-
-
-   
 
     public function store(Request $request)
     {
@@ -36,16 +34,16 @@ class AlertController extends Controller
             'system_alert' => $request->has('system_alert'),
         ]);
 
-        // Save system alert only if system_alert checkbox is checked
         if ($rule->system_alert) {
             SystemAlert::create([
-                'message' => "{$rule->pollutant_type} threshold set at {$rule->threshold} μg/m³"
+                'message' => "{$rule->pollutant_type} threshold set at {$rule->threshold} μg/m³",
+                'type' => 'rule'
             ]);
         }
+        
 
         return redirect()->route('alert.configuration')->with('success', 'New alert rule added successfully!');
     }
-
 
     public function destroy($id)
     {
@@ -64,8 +62,4 @@ class AlertController extends Controller
         $alert->delete();
         return response()->json(['message' => 'System alert removed.']);
     }
-
-    
-
 }
-

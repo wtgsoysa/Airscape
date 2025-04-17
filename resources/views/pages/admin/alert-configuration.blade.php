@@ -137,7 +137,10 @@
         @foreach($recentAlerts as $log)
         <div class="alert-log-item">
             <div>
-                <div class="alert-type">{{ $log['message'] }}</div>
+            <div class="alert-type">
+                {!! str_contains($log['message'], '⚠️') ? $log['message'] : '📘 ' . $log['message'] !!}
+            </div>
+
                 <div class="alert-time">{{ \Carbon\Carbon::parse($log['created_at'])->format('Y-m-d H:i') }}</div>
             </div>
             <button class="btn btn-sm btn-outline-danger delete-alert" data-id="{{ $log['id'] }}">
@@ -200,6 +203,7 @@
         <div class="mb-3">
             <label class="form-label">Pollutant Type</label>
             <select name="pollutant_type" class="form-select" required>
+                <option>AQI</option>
                 <option>PM2.5</option>
                 <option>PM10</option>
                 <option>CO2</option>
