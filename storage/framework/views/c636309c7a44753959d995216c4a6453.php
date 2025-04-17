@@ -138,9 +138,10 @@
                 <div class="alert-type"><?php echo e($log['message']); ?></div>
                 <div class="alert-time"><?php echo e(\Carbon\Carbon::parse($log['created_at'])->format('Y-m-d H:i')); ?></div>
             </div>
-            <button class="btn btn-sm btn-outline-danger delete-alert" data-id="<?php echo e($log['id'] ?? ''); ?>">
+            <button class="btn btn-sm btn-outline-danger delete-alert" data-id="<?php echo e($log['id']); ?>">
                 <i class="bi bi-x-lg"></i>
             </button>
+
 
         </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -247,7 +248,6 @@
                 const alertId = this.dataset.id;
 
                 if (!alertId) {
-                    // No ID, remove the alert from UI only (static)
                     item.remove();
                     return;
                 }
@@ -262,7 +262,7 @@
                     if (res.ok) {
                         item.remove();
                     } else {
-                        alert('Failed to delete alert. Please try again.');
+                        alert('Failed to delete alert.');
                     }
                 });
             });
@@ -270,6 +270,5 @@
     });
 </script>
 <?php $__env->stopPush(); ?>
-
 
 <?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\University\SDTP\AirscapeFinal\Airscape\resources\views/pages/admin/alert-configuration.blade.php ENDPATH**/ ?>
