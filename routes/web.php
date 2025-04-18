@@ -58,6 +58,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/alert-configuration', [AlertController::class, 'store'])->name('alert.configuration.store');
     Route::delete('/admin/alert-configuration/{id}', [AlertController::class, 'destroy'])->name('alert.configuration.delete');
     Route::delete('/admin/system-alerts/{id}', [AlertController::class, 'deleteSystemAlert'])->name('alert.system.delete');
+    Route::delete('/admin/system-alerts/{id}', [AlertController::class, 'deleteSystemAlert']);
+
 
 });
 

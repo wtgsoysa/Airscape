@@ -5,21 +5,20 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AlertRule;
 use Illuminate\Http\Request;
+use App\Models\SystemAlert;
+use Illuminate\Support\Facades\DB;
 
 class AlertController extends Controller
 {
     public function index()
     {
         $rules = AlertRule::latest()->get();
-
-        $recentAlerts = [
-            ['message' => 'CO2 exceeded safe level', 'created_at' => now()->subMinutes(10)],
-            ['message' => 'PM2.5 spike detected', 'created_at' => now()->subMinutes(25)],
-            ['message' => 'Unhealthy AQI reported in Dehiwala', 'created_at' => now()->subHour()],
-        ];
-
+        $recentAlerts = SystemAlert::latest()->take(10)->get();
         return view('pages.admin.alert-configuration', compact('rules', 'recentAlerts'));
     }
+
+
+   
 
     public function store(Request $request)
     {
@@ -29,7 +28,7 @@ class AlertController extends Controller
             'check_frequency' => 'required|string',
         ]);
 
-        AlertRule::create([
+        $rule = AlertRule::create([
             'pollutant_type' => $request->pollutant_type,
             'threshold' => $request->threshold,
             'frequency' => $request->check_frequency,
@@ -37,8 +36,16 @@ class AlertController extends Controller
             'system_alert' => $request->has('system_alert'),
         ]);
 
+        // Save system alert only if system_alert checkbox is checked
+        if ($rule->system_alert) {
+            SystemAlert::create([
+                'message' => "{$rule->pollutant_type} threshold set at {$rule->threshold} μg/m³"
+            ]);
+        }
+
         return redirect()->route('alert.configuration')->with('success', 'New alert rule added successfully!');
     }
+
 
     public function destroy($id)
     {
@@ -48,9 +55,17 @@ class AlertController extends Controller
 
     public function deleteSystemAlert($id)
     {
-        DB::table('system_alerts')->where('id', $id)->delete();
+        $alert = SystemAlert::find($id);
+
+        if (!$alert) {
+            return response()->json(['error' => 'Alert not found.'], 404);
+        }
+
+        $alert->delete();
         return response()->json(['message' => 'System alert removed.']);
     }
+
+    
 
 }
 

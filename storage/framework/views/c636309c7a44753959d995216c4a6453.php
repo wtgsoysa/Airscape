@@ -1,6 +1,4 @@
-@extends('layouts.admin')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     .alert-section-title {
         font-size: 24px;
@@ -90,38 +88,38 @@
         </button>
     </div>
 
-    {{-- Alert Rules List --}}
-    @foreach($rules as $alert)
+    
+    <?php $__currentLoopData = $rules; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $alert): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
     <div class="card-alert">
         <div class="row align-items-center">
             <div class="col-md-2">
-                <div class="rule-label">{{ $alert->pollutant_type }}</div>
+                <div class="rule-label"><?php echo e($alert->pollutant_type); ?></div>
                 <small class="text-muted">Pollutant Type</small>
             </div>
             <div class="col-md-2">
-                <input type="number" value="{{ $alert->threshold }}" class="threshold-input" disabled>
+                <input type="number" value="<?php echo e($alert->threshold); ?>" class="threshold-input" disabled>
                 <small class="text-muted d-block">Threshold (μg/m³)</small>
             </div>
             <div class="col-md-2">
-                <input type="text" class="form-control" value="{{ $alert->frequency }}" disabled>
+                <input type="text" class="form-control" value="<?php echo e($alert->frequency); ?>" disabled>
                 <small class="text-muted d-block">Frequency</small>
             </div>
             <div class="col-md-2 toggle-switch">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" {{ $alert->email_alert ? 'checked' : '' }} disabled>
+                    <input class="form-check-input" type="checkbox" <?php echo e($alert->email_alert ? 'checked' : ''); ?> disabled>
                 </div>
                 <div>Email Alert</div>
             </div>
             <div class="col-md-2 toggle-switch">
                 <div class="form-check form-switch">
-                    <input class="form-check-input" type="checkbox" {{ $alert->system_alert ? 'checked' : '' }} disabled>
+                    <input class="form-check-input" type="checkbox" <?php echo e($alert->system_alert ? 'checked' : ''); ?> disabled>
                 </div>
                 <div>System Alert</div>
             </div>
             <div class="col-md-2 text-end">
-                <form action="{{ route('alert.configuration.delete', $alert->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
+                <form action="<?php echo e(route('alert.configuration.delete', $alert->id)); ?>" method="POST">
+                    <?php echo csrf_field(); ?>
+                    <?php echo method_field('DELETE'); ?>
                     <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this rule?')">
                         <i class="bi bi-trash"></i>
                     </button>
@@ -129,27 +127,27 @@
             </div>
         </div>
     </div>
-    @endforeach
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
-    {{-- System Alerts Log --}}
+    
     <div class="system-alert-header">🛑 Recent System Alerts</div>
     <div class="card-system-alert">
-        @foreach($recentAlerts as $log)
+        <?php $__currentLoopData = $recentAlerts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $log): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="alert-log-item">
             <div>
-                <div class="alert-type">{{ $log['message'] }}</div>
-                <div class="alert-time">{{ \Carbon\Carbon::parse($log['created_at'])->format('Y-m-d H:i') }}</div>
+                <div class="alert-type"><?php echo e($log['message']); ?></div>
+                <div class="alert-time"><?php echo e(\Carbon\Carbon::parse($log['created_at'])->format('Y-m-d H:i')); ?></div>
             </div>
-            <button class="btn btn-sm btn-outline-danger delete-alert" data-id="{{ $log['id'] }}">
+            <button class="btn btn-sm btn-outline-danger delete-alert" data-id="<?php echo e($log['id']); ?>">
                 <i class="bi bi-x-lg"></i>
             </button>
 
 
         </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 
-    {{-- Admin Guide --}}
+    
 <div class="card mt-5" style="border-left: 5px solid #007872; background-color: #f9fffe;">
     <div class="card-body">
         <h5 class="fw-bold text-dark mb-3">🧠 How to Use Alert Configuration</h5>
@@ -186,7 +184,7 @@
 
 </div>
 
-{{-- Add Alert Modal --}}
+
 <div class="modal fade" id="addAlertModal" tabindex="-1" aria-labelledby="addAlertModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content p-4">
@@ -195,8 +193,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
-      <form action="{{ route('alert.configuration.store') }}" method="POST">
-        @csrf
+      <form action="<?php echo e(route('alert.configuration.store')); ?>" method="POST">
+        <?php echo csrf_field(); ?>
         <div class="mb-3">
             <label class="form-label">Pollutant Type</label>
             <select name="pollutant_type" class="form-select" required>
@@ -240,8 +238,8 @@
     </div>
   </div>
 </div>
-@endsection
-@push('scripts')
+<?php $__env->stopSection(); ?>
+<?php $__env->startPush('scripts'); ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.delete-alert').forEach(button => {
@@ -257,7 +255,7 @@
                 fetch(`/admin/system-alerts/${alertId}`, {
                     method: 'DELETE',
                     headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
                         'Accept': 'application/json'
                     }
                 }).then(res => {
@@ -271,4 +269,6 @@
         });
     });
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\University\SDTP\AirscapeFinal\Airscape\resources\views/pages/admin/alert-configuration.blade.php ENDPATH**/ ?>
