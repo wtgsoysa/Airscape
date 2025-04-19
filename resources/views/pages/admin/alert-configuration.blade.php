@@ -48,10 +48,6 @@
         height: 24px;
     }
 
-    .dropdown-toggle::after {
-        display: none;
-    }
-
     .system-alert-header {
         font-size: 18px;
         font-weight: 600;
@@ -134,56 +130,53 @@
     {{-- System Alerts Log --}}
     <div class="system-alert-header">🛑 Recent System Alerts</div>
     <div class="card-system-alert">
-        @foreach($recentAlerts as $log)
+        @forelse($recentAlerts as $log)
         <div class="alert-log-item">
             <div>
-                <div class="alert-type">{{ $log['message'] }}</div>
+                <div class="alert-type">
+                    {!! str_contains($log['message'], '⚠️') ? $log['message'] : '📘 ' . $log['message'] !!}
+                </div>
                 <div class="alert-time">{{ \Carbon\Carbon::parse($log['created_at'])->format('Y-m-d H:i') }}</div>
             </div>
             <button class="btn btn-sm btn-outline-danger delete-alert" data-id="{{ $log['id'] }}">
                 <i class="bi bi-x-lg"></i>
             </button>
-
-
         </div>
-        @endforeach
+        @empty
+        <div class="text-muted">No alerts available.</div>
+        @endforelse
     </div>
 
     {{-- Admin Guide --}}
-<div class="card mt-5" style="border-left: 5px solid #007872; background-color: #f9fffe;">
-    <div class="card-body">
-        <h5 class="fw-bold text-dark mb-3">🧠 How to Use Alert Configuration</h5>
-
-        <div class="mb-3">
-            <span class="fw-semibold text-dark">📌 Pollutant Type</span>
-            <p class="text-muted mb-2">Select the air quality component you want to monitor.</p>
-            <ul class="text-muted small mb-0">
-                <li><strong>PM2.5 / PM10</strong> – Fine dust particles (harmful to lungs).</li>
-                <li><strong>CO2</strong> – Indicates poor ventilation.</li>
-                <li><strong>NO2 / O3</strong> – Gases causing respiratory issues.</li>
-            </ul>
-        </div>
-
-        <div class="mb-3">
-            <span class="fw-semibold text-dark">📌 Threshold (μg/m³)</span>
-            <p class="text-muted mb-0">Set the danger level. System triggers an alert when this value is exceeded.</p>
-        </div>
-
-        <div class="mb-3">
-            <span class="fw-semibold text-dark">📌 Frequency</span>
-            <p class="text-muted mb-0">How often should the system check? Use <strong>15 mins</strong> for critical areas, <strong>Hourly</strong> or <strong>Daily</strong> for general zones.</p>
-        </div>
-
-        <div class="mb-2">
-            <span class="fw-semibold text-dark">📌 Alerts</span>
-            <ul class="text-muted small mb-0">
-                <li><strong>Email Alert</strong> – Sends alert to your inbox.</li>
-                <li><strong>System Alert</strong> – Shows in dashboard's alert log.</li>
-            </ul>
+    <div class="card mt-5" style="border-left: 5px solid #007872; background-color: #f9fffe;">
+        <div class="card-body">
+            <h5 class="fw-bold text-dark mb-3">🧠 How to Use Alert Configuration</h5>
+            <div class="mb-3">
+                <span class="fw-semibold text-dark">📌 Pollutant Type</span>
+                <p class="text-muted mb-2">Select the air quality component you want to monitor.</p>
+                <ul class="text-muted small mb-0">
+                    <li><strong>PM2.5 / PM10</strong> – Fine dust particles (harmful to lungs).</li>
+                    <li><strong>CO2</strong> – Indicates poor ventilation.</li>
+                    <li><strong>NO2 / O3</strong> – Gases causing respiratory issues.</li>
+                </ul>
+            </div>
+            <div class="mb-3">
+                <span class="fw-semibold text-dark">📌 Threshold (μg/m³)</span>
+                <p class="text-muted mb-0">Set the danger level. System triggers an alert when this value is exceeded.</p>
+            </div>
+            <div class="mb-3">
+                <span class="fw-semibold text-dark">📌 Frequency</span>
+                <p class="text-muted mb-0">How often should the system check? Use <strong>15 mins</strong> for critical areas, <strong>Hourly</strong> or <strong>Daily</strong> for general zones.</p>
+            </div>
+            <div class="mb-2">
+                <span class="fw-semibold text-dark">📌 Alerts</span>
+                <ul class="text-muted small mb-0">
+                    <li><strong>Email Alert</strong> – Sends alert to your inbox.</li>
+                    <li><strong>System Alert</strong> – Shows in dashboard's alert log.</li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-
 </div>
 
 {{-- Add Alert Modal --}}
@@ -200,11 +193,13 @@
         <div class="mb-3">
             <label class="form-label">Pollutant Type</label>
             <select name="pollutant_type" class="form-select" required>
-                <option>PM2.5</option>
-                <option>PM10</option>
-                <option>CO2</option>
-                <option>NO2</option>
-                <option>O3</option>
+                <option value="" disabled selected>Select pollutant type</option>
+                <option value="AQI">AQI</option>
+                <option value="PM2.5">PM2.5</option>
+                <option value="PM10">PM10</option>
+                <option value="CO2">CO2</option>
+                <option value="NO2">NO2</option>
+                <option value="O3">O3</option>
             </select>
         </div>
 
@@ -241,6 +236,7 @@
   </div>
 </div>
 @endsection
+
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function () {

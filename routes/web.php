@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/admin/alert-configuration/{id}', [AlertController::class, 'destroy'])->name('alert.configuration.delete');
     Route::delete('/admin/system-alerts/{id}', [AlertController::class, 'deleteSystemAlert'])->name('alert.system.delete');
     Route::delete('/admin/system-alerts/{id}', [AlertController::class, 'deleteSystemAlert']);
+    
 
 
 });
@@ -71,3 +72,7 @@ Route::get('/user/home', [SensorDisplayController::class, 'index'])->name('user.
 
 Route::view('/user/about', 'pages.user.about')->name('user.about');
 Route::view('/user/contact', 'pages.user.contact')->name('user.contact');
+
+
+// ───── TEMP: Manual AQI Simulation Test Route ─────
+Route::get('/admin/test-simulate', [SensorController::class, 'simulateAQI'])->name('admin.test.simulate');
