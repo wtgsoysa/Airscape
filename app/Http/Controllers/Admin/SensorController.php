@@ -8,6 +8,7 @@ use App\Models\Sensor;
 use App\Models\AlertRule;
 use App\Models\SystemAlert;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class SensorController extends Controller
 {
@@ -40,9 +41,9 @@ class SensorController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'location'     => 'required|string|max:255', // ✅ Correct field name
             'name'         => 'required|string|max:255',
             'sensor_id'    => 'required|string|unique:sensors',
-            'location'     => 'required|string|max:255',
             'status'       => 'required|in:Active,Inactive',
             'baseline_aqi' => 'required|numeric',
             'frequency'    => 'required|numeric',
@@ -50,11 +51,11 @@ class SensorController extends Controller
             'latitude'     => 'required|numeric',
             'longitude'    => 'required|numeric',
         ]);
-
+        
         Sensor::create([
             'name'         => $request->name,
             'sensor_id'    => $request->sensor_id,
-            'location'     => $request->location,
+            'location'     => $request->location, // ✅ Use 'location' here
             'status'       => $request->status,
             'baseline_aqi' => $request->baseline_aqi,
             'frequency'    => $request->frequency,
@@ -64,6 +65,7 @@ class SensorController extends Controller
             'current_aqi'  => $request->baseline_aqi,
             'last_updated' => now(),
         ]);
+        
 
         return redirect()->route('admin.sensors')->with('success', 'Sensor added successfully.');
     }
@@ -75,49 +77,58 @@ class SensorController extends Controller
 
         return redirect()->route('admin.sensors')->with('success', 'Sensor deleted successfully.');
     }
-
+    
     public function simulateAQI()
     {
-        $sensors = Sensor::where('status', 'Active')->get();
-        $rules = AlertRule::where('system_alert', true)->get();
+        $sensors = \App\Models\Sensor::where('status', 'Active')->get();
+        $rules = \App\Models\AlertRule::where('system_alert', true)
+            ->whereRaw('LOWER(pollutant_type) = ?', ['aqi'])
+            ->get();
+
+        $now = now();
 
         foreach ($sensors as $sensor) {
-            $now = Carbon::now();
 
-            // Check if sensor needs update
-            if ($sensor->last_updated === null || $now->diffInMinutes($sensor->last_updated) >= $sensor->frequency) {
-                $baseline = $sensor->baseline_aqi;
-                $variation = $sensor->variation;
+    // ✅ TEMP: Force simulation regardless of timing
+    // if ($sensor->last_updated === null || $now->diffInMinutes($sensor->last_updated) >= $sensor->frequency)
+    {
+        $newAQI = rand(160, 200);
 
-                // Simulate new AQI
-                $fluctuation = rand(-$variation, $variation);
-                $newAQI = max(0, $baseline + $fluctuation);
+        $sensor->current_aqi = $newAQI;
+        $sensor->last_updated = $now;
+        $sensor->save();
 
-                $sensor->current_aqi = $newAQI;
-                $sensor->last_updated = $now;
-                $sensor->save();
+        foreach ($rules as $rule) {
+            if ($newAQI >= $rule->threshold) {
+                $message = "⚠️ AQI threshold exceeded at {$sensor->name}: {$newAQI} μg/m³ (Threshold: {$rule->threshold})";
 
-                // Check alert rules
-                foreach ($rules as $rule) {
-                    if (strtolower($rule->pollutant_type) === 'aqi' && $newAQI >= $rule->threshold) {
-                        // Avoid duplicate alerts
-                        $alreadyExists = SystemAlert::where('message', "⚠️ AQI threshold exceeded at {$sensor->name}: {$newAQI} μg/m³ (Threshold: {$rule->threshold})")
-                            ->whereDate('created_at', $now->toDateString())
-                            ->exists();
+                $alreadyExists = \App\Models\SystemAlert::where('message', $message)
+                    ->where('type', 'sensor')
+                    ->whereDate('created_at', $now->toDateString())
+                    ->exists();
 
-                        if (!$alreadyExists) {
-                            SystemAlert::create([
-                                'message' => "⚠️ AQI threshold exceeded at {$sensor->name}: {$newAQI} μg/m³ (Threshold: {$rule->threshold})",
-                                'type' => 'sensor'
-                            ]);
-                            
-                        }
-                    }
+                if (!$alreadyExists) {
+                   
+
+                    \App\Models\SystemAlert::create([
+                        'message' => $message,
+                        'type' => 'sensor'
+                    ]);
                 }
             }
         }
+    }
+}
 
+
+        echo "🌀 All sensors updated at: " . $now->format('Y-m-d H:i:s') . "<br>";
         return response()->json(['message' => 'Sensor AQI values updated and alerts checked']);
     }
+
+
+
+    
+    
+    
 
 }
