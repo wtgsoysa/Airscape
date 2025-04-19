@@ -6,15 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class SystemAlert extends Model
 {
-    protected $fillable = ['message'];
-
-    public function up()
-    {
-        Schema::create('system_alerts', function (Blueprint $table) {
-            $table->id();
-            $table->string('message');
-            $table->timestamps();
-        });
-    }
-
+    // ✅ This must include BOTH fields
+    protected $fillable = ['message', 'type'];
 }
