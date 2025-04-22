@@ -1,6 +1,4 @@
-@extends('layouts.user')
-
-@section('content')
+<?php $__env->startSection('content'); ?>
 <style>
     body {
         background: linear-gradient(to bottom, #f4fcfb, #e6f9f7);
@@ -133,8 +131,8 @@
 <div class="sensor-section">
     <div class="sensor-title">🌐 Colombo Sensor Network</div>
     <div class="sensor-grid">
-        @foreach($sensors as $sensor)
-        @php
+        <?php $__currentLoopData = $sensors; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sensor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <?php
             if ($sensor->current_aqi <= 50) {
                 $class = 'aqi-good';
                 $label = 'Good';
@@ -148,13 +146,13 @@
                 $class = 'aqi-hazardous';
                 $label = 'Hazardous';
             }
-        @endphp
+        ?>
 
         <div class="sensor-card">
-            <h5>{{ $sensor->name }}</h5>
-            <span class="aqi-badge {{ $class }}">AQI {{ $sensor->current_aqi }} - {{ $label }}</span>
+            <h5><?php echo e($sensor->name); ?></h5>
+            <span class="aqi-badge <?php echo e($class); ?>">AQI <?php echo e($sensor->current_aqi); ?> - <?php echo e($label); ?></span>
         </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
 </div>
 
@@ -171,9 +169,9 @@
     </div>
     <div class="refresh-btn" onclick="location.reload()">🔄 Refresh Air Data</div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
     const map = L.map('map').setView([6.85, 79.88], 11);
@@ -181,7 +179,7 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    const sensors = @json($sensors);
+    const sensors = <?php echo json_encode($sensors, 15, 512) ?>;
 
     function getAQILevel(aqi) {
         if (aqi <= 50) return { level: 'Good', color: 'good', note: 'Air quality is satisfactory.' };
@@ -220,4 +218,6 @@
     setInterval(updateClock, 1000);
     updateClock();
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+
+<?php echo $__env->make('layouts.user', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH F:\University\SDTP\AirscapeFinalVersion\Airscape\resources\views/pages/user/home.blade.php ENDPATH**/ ?>
