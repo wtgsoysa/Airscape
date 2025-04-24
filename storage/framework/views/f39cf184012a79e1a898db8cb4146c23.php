@@ -116,10 +116,12 @@
         <div class="row g-4">
             <?php
                 $team = [
-                    ['name' => 'Akila Lakshitha', 'role' => 'Frontend Developer', 'img' => asset('assests/team1.jpg')],
-                    ['name' => 'Thanuga Soysa', 'role' => 'Backend Developer', 'img' => asset('assests/team1.jpg')],
-                    ['name' => 'Janudi Meegoda', 'role' => 'UI/UX Designer', 'img' => asset('assets/user3.jpg')],
-                    ['name' => 'Yenuli Tharandi', 'role' => 'QA & Research', 'img' => asset('assets/user4.jpg')],
+                    ['name' => 'Thanuga Soysa', 'role' => 'SE Undergraduate', 'img' => asset('assests/Thanuga.jpg')],
+                    ['name' => 'Akila Lakshitha', 'role' => 'SE Undergraduate', 'img' => asset('assests/akila.jpg')],
+                    ['name' => 'Janudi Meegoda', 'role' => 'SE Undergraduate', 'img' => asset('assests/janudi.jpg')],
+                    ['name' => 'Yenuli Tharandi', 'role' => 'SE Undergraduate', 'img' => asset('assests/yenuli.png')],
+                    ['name' => 'Imashi Senarathna', 'role' => 'SE Undergraduate', 'img' => asset('assests/imashi.png')],
+                    ['name' => 'Dananjaya PRIYADARSHANA', 'role' => 'SE Undergraduate', 'img' => asset('assests/Dananjaya.png')],
                 ];
             ?>
 
