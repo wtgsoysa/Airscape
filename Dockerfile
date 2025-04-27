@@ -3,14 +3,13 @@ FROM php:8.2-fpm
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     nginx \
+    git \
+    unzip \
+    curl \
     libpng-dev \
     libonig-dev \
     libxml2-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    supervisor
+    zip
 
 # Install PHP extensions
 RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
@@ -21,7 +20,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy the entire project
+# Copy project files
 COPY . .
 
 # Install PHP dependencies
@@ -33,13 +32,11 @@ RUN php artisan storage:link
 # Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Copy Nginx configuration file
+# Copy Nginx configuration
 COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Copy Supervisor configuration file
-COPY docker/supervisord.conf /etc/supervisord.conf
-
+# Expose HTTP port
 EXPOSE 80
 
-# Start Supervisor to run Nginx + PHP-FPM together
-CMD ["/usr/bin/supervisord"]
+# Start PHP-FPM and Nginx together
+CMD service php-fpm start && nginx -g "daemon off;"
