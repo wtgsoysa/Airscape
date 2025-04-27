@@ -21,24 +21,25 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www
 
-# Copy project files
+# Copy the entire project
 COPY . .
 
-# Install dependencies
+# Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
 RUN php artisan config:cache
 RUN php artisan migrate --force
 RUN php artisan storage:link
 
-# Permissions
+# Set permissions
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-# Nginx configuration
-COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+# Copy Nginx configuration file
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Supervisor configuration to run Nginx + PHP together
-COPY ./docker/supervisord.conf /etc/supervisord.conf
+# Copy Supervisor configuration file
+COPY docker/supervisord.conf /etc/supervisord.conf
 
 EXPOSE 80
 
+# Start Supervisor to run Nginx + PHP-FPM together
 CMD ["/usr/bin/supervisord"]
