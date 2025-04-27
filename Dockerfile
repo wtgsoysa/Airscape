@@ -35,8 +35,7 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # Copy Nginx configuration
 COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Expose HTTP port
 EXPOSE 80
 
-# Start PHP-FPM and Nginx together
-CMD service php-fpm start && nginx -g "daemon off;"
+# Start php-fpm and nginx directly without services
+CMD ["sh", "-c", "php-fpm & nginx -g 'daemon off;'"]
